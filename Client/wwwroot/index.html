@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Candidate Portal</title>
+    <base href="/" />
+
+    <!--Ashvin 20-06-2022-->
+    <link href="manifest.json" rel="manifest" />
+    <!--<link rel="apple-touch-icon" sizes="264x82" href="maroon-logo.png" />-->
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+    <!--Ashvin 20-06-2022-->
+
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/app.css?version=1" rel="stylesheet" />
+    <link href="CandidatePortal.Client.styles.css?version=2" rel="stylesheet" />
+
+    <link href="css/quill.snow.css" rel="stylesheet" />
+    <link href="css/quill.bubble.css" rel="stylesheet" />
+</head>
+
+<body class="">
+    <div id="app">
+        <div class="spinner-container">
+            <img src="Images/processing.gif" />
+        </div>
+    </div>
+
+    <!--<div id="global-loader" style="display: none;">
+        <img src="assets/img/loader.svg" class="loader-img" alt="Loader">
+    </div>-->
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="_content/Microsoft.Authentication.WebAssembly.Msal/AuthenticationService.js"></script>
+    <script src="text-editorJs/quill.js"></script>
+    <script src="text-editorJs/quill-blot-formatter.min.js"></script>
+    <script src="text-editorJs/Blazored-BlazorQuill.js"></script>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="scripts/Common.js?v=1.1"></script>
+    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+    <style>
+        .spinner-container {
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            z-index: 999;
+            top: 40%;
+            left: 40%;
+        }
+    </style>
+    <script>
+       //export function HideMainScroll() {
+       //     document.querySelector("#modal-container").style.display = 'block';
+       //     document.querySelector("body").style.overflow = 'hidden';
+       // }
+
+        //export function ShowMainScroll() {
+        //    document.querySelector("#modal-container").style.display = 'none';
+        //    document.querySelector("body").style.overflow = 'visible';
+        //}
+
+        //window.HideMainScroll = () => {
+        //    document.querySelector("#modal-container").style.display = 'block';
+        //    document.querySelector("body").style.overflow = 'hidden';
+        //};
+
+    </script>
+    <!--Ashvin 20-06-2022-->
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
+    <!--Ashvin 20-06-2022-->
+</body>
+
+</html>

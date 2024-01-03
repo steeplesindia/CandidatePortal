@@ -1,0 +1,776 @@
+﻿@page "/candidateprofileview"
+@layout MainLayout
+@inject Microsoft.Extensions.Configuration.IConfiguration configuration
+@*@inject Blazored.LocalStorage.ILocalStorageService localStore*@
+@using System.Globalization
+@using CandidatePortal.Client.Componets
+
+<MudBreadcrumbs Items="_items">
+    <ItemTemplate Context="item">  
+    @if (@item.Text.ToLower() == "home")
+    {
+        <MudLink Href="@item.Href" Class="colorblue"><MudIcon Class="ma-4 colorblue" Icon="@Icons.Material.Filled.Home" /> @langaugecontainer.Keys["Home"]</MudLink>  
+    }
+    else if (@item.Text.ToLower() == "candidate profile")
+    {
+        <MudLink Href="@item.Href" Disabled="true"> <MudIcon Class="ma-4" Icon="@Icons.Filled.AccountBox" /> @langaugecontainer.Keys["Candidate Profile"]</MudLink>  
+    }
+    </ItemTemplate>  
+</MudBreadcrumbs>
+
+
+@if(IsLoding)
+{
+    <AsyncLoader />
+}
+
+<MudCard Class="card">
+    <MudCardContent>
+        <div class="row gutters-sm">
+            <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-3 ">
+                <MudCard Class="card bg-c-lite-green">
+                    <MudCardContent>
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <img src="@obj_CandidateModel.ImageURL" alt="Admin" class="rounded-circle ProfilePicSize" >
+                            <div class="mt-3">
+                                <h4>@obj_CandidateModel.FirstName @obj_CandidateModel.MiddleName @obj_CandidateModel.LastName </h4>
+                                <p class="mb-1">@obj_CandidateModel.CurrentJobTitle</p>
+                                <p class="text-muted font-size-sm">
+                                    
+                                    @*@obj_CandidateModel.Street, @obj_CandidateModel.City
+                                    @if (@obj_CandidateModel.City != null && @obj_CandidateModel.City != "")
+                                    {
+                                            <label>,</label>
+                                    }
+
+                                    @obj_CandidateModel.State
+                                    @if (@obj_CandidateModel.State != null && @obj_CandidateModel.State != "")
+                                    {
+                                            <label>,</label>
+                                    }*@
+
+                                    @obj_CandidateModel.Country
+                                    @*@if (@obj_CandidateModel.Country != null && @obj_CandidateModel.Country != "")
+                                    {
+                                            <label>,</label>
+                                    }*@
+                                </p>
+                                <button class="btn btn-primary hidden" style="visibility:hidden">Follow</button>
+                                <button class="btn btn-outline-primary hidden" style="visibility:hidden">Message</button>
+                            </div>
+                        </div>
+                    </MudCardContent>
+                </MudCard>
+            </div>
+            <div class="col-lg-8 col-md-6 col-sm-12 col-xs-12">
+                <MudCard Class="card mb-2">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            @*<MudText Typo="Typo.h5" Class="font-18" Color="@Color.Info">Personal Details </MudText>*@
+                            <h6 class="colorblue"> @langaugecontainer.Keys["Personal Details"] </h6>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+
+                            @*<MudNavLink Match="NavLinkMatch.All" Href="/candidateprofileview" Icon="@Icons.Filled.AccountBox" title="Candidate Profile">
+                            </MudNavLink>*@
+
+                            <MudIconButton Icon="@Icons.Filled.Edit" @onclick="() => CandidateBasicProfile()" Color="Color.Default" />
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">@langaugecontainer.Keys["Full Name"]</h6>
+                            </div>
+                            <div class="col-sm-9 ">
+                                @obj_CandidateModel.FirstName @obj_CandidateModel.MiddleName @obj_CandidateModel.LastName
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">@langaugecontainer.Keys["Email"] </h6>
+                            </div>
+                            <div class="col-sm-9 ">
+                                @obj_CandidateModel.Email
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0"> @langaugecontainer.Keys["Phone"] </h6>
+                            </div>
+                            <div class="col-sm-9 ">
+                                @obj_CandidateModel.ContactNo
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">@langaugecontainer.Keys["Mobile"] </h6>
+                            </div>
+                            <div class="col-sm-9 ">
+                                @obj_CandidateModel.AlternateContactNo
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">@langaugecontainer.Keys["Address"] </h6>
+                            </div>
+                            <div class="col-sm-9 ">
+                                @*@obj_CandidateModel.Street, @obj_CandidateModel.City
+                                @if (@obj_CandidateModel.City != null && @obj_CandidateModel.City != "")
+                                {
+                                        <label>,</label>
+                                }
+                                @obj_CandidateModel.State
+                                @if (@obj_CandidateModel.State != null && @obj_CandidateModel.State != "")
+                                {
+                                        <label>,</label>
+                                }*@
+
+                                @obj_CandidateModel.Country
+                                @*@if (@obj_CandidateModel.Country != null && @obj_CandidateModel.Country != "")
+                                {
+                                        <label>,</label>
+                                }*@
+                            </div>
+                        </div>
+                    </MudCardContent>
+                </MudCard>
+            </div>
+        </div>
+        <div class="row gutters-sm">
+            <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-3 ">
+                <MudCard Class="card">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <h6 Color="@Color.Success" class="colorblue"> @langaugecontainer.Keys["Social Media"]</h6>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent Style="width:100%; overflow-x:auto !important">
+                        <ul class="list-group list-group-flush">
+                            @*<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap  invisible d-none">
+                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook mr-2 icon-inline text-primary"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg> @langaugecontainer.Keys["Facebook"] </h6>
+                                <span class=""><a href="@obj_CandidateModel.FaceBookLink" target="_blank">  @obj_CandidateModel.FaceBookLink </a> </span>
+                            </li>*@
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"><img width="24" src="./Images/pngs/icons8-linkedin-2.svg" height="24" viewBox="0 0 24 24" /> @langaugecontainer.Keys["Linkedin"]  </h6>
+                                <span class=""><a href="@obj_CandidateModel.LinkedinLink" target="_blank"> @obj_CandidateModel.LinkedinLink </a></span>
+                            </li>
+                            @*<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap invisible d-none">
+                                <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter mr-2 icon-inline text-info"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>  @langaugecontainer.Keys["Twitter"] </h6>
+                                <span class=""> <a href="@obj_CandidateModel.TwitterLink" target="_blank">@obj_CandidateModel.TwitterLink</a>  </span>
+                            </li>*@
+                        </ul>
+                    </MudCardContent>
+                </MudCard>
+            </div>
+            <div class="col-lg-8 col-md-6 col-sm-12 col-xs-12">
+                <MudCard Class="card pt-2">
+                    <MudCardHeader Class="pb-0 pt-0">
+                        <CardHeaderContent>
+                            @*<MudText Typo="Typo.h5" Class="font-18" Color="@Color.Info">Professional Experience </MudText>*@
+                            <h6 class="colorblue"> @langaugecontainer.Keys["Professional Experience"] </h6>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudIconButton Icon="@Icons.Filled.Add" @onclick="() => ShowHidePopupDivision(1)" Color="Color.Default" />
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent Class="pt-0">
+                        <div class="card-block">
+                            <MudSimpleTable Hover="true" Dense="true" FixedHeader="true" Style="width:100%; height:160px !important">
+                                <thead>
+                                    <tr>
+                                        <th Style="width:12%" class="fw-bold"> @langaugecontainer.Keys["Action"]  </th>
+                                        <th Style="width:22%" class="fw-bold"> @langaugecontainer.Keys["Employer"]  </th>
+                                        <th Style="width:20%" class="fw-bold"> @langaugecontainer.Keys["Position"]  </th>
+                                        <th Style="width:30%" class="fw-bold"> @langaugecontainer.Keys["Employer URL"]  </th>
+                                        <th Style="width:16%" class="fw-bold"> @langaugecontainer.Keys["Contact No"]  </th>
+                                        @* <th class="m-b-10 f-w-600" Style="width:18%"> Location </th>
+                                            <th class="m-b-10 f-w-600" Style="width:10%">  From Date </th>
+                                            <th class="m-b-10 f-w-600" Style="width:10%">  To Date </th>*@
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var selectItem in @obj_CandidateModel.CandidateExperiences)
+                                    {
+                                            <tr>
+                                                <td>
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Success" @onclick="() => EditCandidateExp(selectItem.CandidateNumber, selectItem.Employer)" aria-label="delete" Size="Size.Small"></MudIconButton>
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Class="colorblue"  @onclick="() => DeleteCandidateExperienceAsync(selectItem.CandidateNumber, selectItem.Employer)" aria-label="Edit" Size="Size.Small"></MudIconButton>
+                                                </td>
+                                                <td>
+                                                @selectItem.Employer
+                                                </td>
+                                                <td>
+                                                @selectItem.Position
+                                                </td>
+                                                <td>
+                                                @selectItem.EmployerURL
+                                                </td>
+                                                <td>
+                                                @selectItem.EmployerContactNo
+                                                </td>
+                                            @*   <td>
+                                                @selectItem.EmployerLocation
+                                                </td>
+                                                <td>
+                                                @selectItem.StartDate
+
+                                                </td>
+                                                <td>
+                                                @selectItem.EndDate
+                                                </td>*@
+                                            </tr>
+                                    }
+                                </tbody>
+                            </MudSimpleTable>
+                        </div>
+                    </MudCardContent>
+                </MudCard>
+            </div>
+        </div>
+        <div class="row gutters-sm">
+            <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-3 ">
+                <MudCard Class="card mt-2">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <h6 Color="@Color.Success" class="colorblue"> @langaugecontainer.Keys["Demographic Info"] </h6>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"> @langaugecontainer.Keys["DOB"]: </h6>
+                                <span class="">
+                                    @if (@obj_CandidateModel.Dob != null && @obj_CandidateModel.Dob.Value.ToShortDateString() != "1/1/1900")
+                                    {
+                                        @obj_CandidateModel.Dob.Value.ToShortDateString()
+                                        ;
+                                    }
+                                   @* else
+                                    {
+                                        @obj_CandidateModel.Dob
+                                        ;
+                                    }*@
+                                </span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"> @langaugecontainer.Keys["Gender"]: </h6>
+                                 <span class="">  @langaugecontainer.Keys[GetGenderName(@obj_CandidateModel.Gender)] </span>
+
+                                @*  @if (@obj_CandidateModel.Gender == 0)
+                                    {
+                                    <span class=""> @langaugecontainer.Keys["Male"]  </span>
+                                    }
+                                    else @if (@obj_CandidateModel.Gender == 1)
+                                    {
+                                    <span class=""> @langaugecontainer.Keys["Female"] </span>
+                                    }
+                                    else
+                                    {
+                                    <span class=""> @langaugecontainer.Keys["Other"]  </span>
+                                    }*@
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"> @langaugecontainer.Keys["Marital Status"]</h6>
+                                 <span class="">  @langaugecontainer.Keys[GetMaritalStatusName(@obj_CandidateModel.MaritalStatus)] </span>
+
+                                @* @if (@obj_CandidateModel.MaritalStatus == 0)
+                                    {
+                                    <span class=""> @langaugecontainer.Keys["Single"] </span>
+                                    }
+                                    else @if (@obj_CandidateModel.MaritalStatus == 1)
+                                    {
+                                    <span class=""> @langaugecontainer.Keys["Married"] </span>
+                                    }
+                                    else
+                                    {
+                                    <span class=""> @langaugecontainer.Keys["Widrow"] </span>
+                                    }*@
+                            </li>
+                        </ul>
+                    </MudCardContent>
+                </MudCard>
+            </div>
+            <div class="col-lg-8 col-md-6 col-sm-12 col-xs-12">
+                <MudCard Class="card mt-2">
+                    <MudCardHeader Class="pb-0 pt-0">
+                        <CardHeaderContent>
+                            @*<MudText Typo="Typo.h5" Class="font-18" Color="@Color.Info">Education Summary </MudText>*@
+                            <h6 Color="@Color.Success" class="colorblue"> @langaugecontainer.Keys["Education Summary"] </h6>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudIconButton Icon="@Icons.Filled.Add" @onclick="() => ShowHidePopupDivision(2)" Color="Color.Default" />
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent Class="pt-0">
+                        <div class="card-block">
+                            <MudSimpleTable Hover="true" Dense="true" FixedHeader="true" Style="width:100%; height:160px !important">
+                                <thead>
+                                    <tr>
+                                        <th Style="width:15%" class="fw-bold"> @langaugecontainer.Keys["Action"]  </th>
+                                        <th Style="width:25%" class="fw-bold"> @langaugecontainer.Keys["Education"]  </th>
+                                        <th Style="width:15%" class="fw-bold"> @langaugecontainer.Keys["From Date"]  </th>
+                                        <th Style="width:15%" class="fw-bold"> @langaugecontainer.Keys["To Date"]  </th>
+                                        <th Style="width:15%" class="fw-bold"> @langaugecontainer.Keys["Grade"]  </th>
+                                        @*<th Style="width:15%" class="fw-bold"> @langaugecontainer.Keys["Scale"]  </th>*@
+                                    </tr>
+                                </thead>
+                                <tbody >
+                                    @foreach (var selectItem in @obj_CandidateModel.CandidateEducations)
+                                    {
+                                            <tr>
+                                                <td>
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Success" @onclick="() => EditEducationValue(selectItem.CandidateNumber, selectItem.EducationERPRecId)" aria-label="delete" Size="Size.Small"></MudIconButton>
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Class="colorblue" @onclick="() => DeleteCandidateEducationAsync(selectItem.CandidateNumber, selectItem.EducationERPRecId)" aria-label="Edit" Size="Size.Small"></MudIconButton>
+                                                </td>
+                                                <td>
+                                                @selectItem.Code
+                                                </td>
+                                                <td>
+                                                @if (@selectItem.StartDate != null && @selectItem.StartDate.Value.ToShortDateString() != "1/1/1900")
+                                                {
+                                                    @selectItem.StartDate.Value.ToShortDateString()
+                                                    ;
+                                                }
+                                               @* else
+                                                {
+                                                    @selectItem.StartDate
+                                                }*@
+                                                </td>
+                                                <td>
+                                                @if (@selectItem.EndDate != null && @selectItem.EndDate.Value.ToShortDateString() != "1/1/1900")
+                                                {
+                                                    @selectItem.EndDate.Value.ToShortDateString()
+                                                    ;
+                                                }
+                                                @*else
+                                                {
+                                                    @selectItem.EndDate
+                                                }*@
+                                                </td>
+                                                <td>
+                                                @selectItem.AvgGrade
+                                                </td>
+                                                @*<td>
+                                                @selectItem.Scale
+                                                </td>*@
+                                            </tr>
+                                    }
+                                </tbody>
+                            </MudSimpleTable>
+                        </div>
+                    </MudCardContent>
+                </MudCard>
+            </div>
+        </div>
+
+        <div class="row gutters-sm mt-3 invisible d-none">
+            <div class="col-sm-12 mb-3">
+                <MudCard Class="card " Elevation="2">
+                    <MudCardHeader Class="pb-0 pt-0">
+                        <CardHeaderContent>
+                            <h6 Color="@Color.Success" class="colorblue"> @langaugecontainer.Keys["Skill"] </h6>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudIconButton Icon="@Icons.Filled.Add" @onclick="() => ShowHidePopupDivision(3)" Color="Color.Default" />
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent Class="pt-0">
+                        <div class="card-block">
+                            <MudSimpleTable Hover="true" Dense="true" FixedHeader="true" Style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th Style="width:17%" class="fw-bold"> @langaugecontainer.Keys["Action"] </th>
+                                        <th Style="width:20%" class="fw-bold"> @langaugecontainer.Keys["Skill"] </th>
+                                        <th Style="width:20%" class="fw-bold"> @langaugecontainer.Keys["Skill Level"] </th>
+                                        <th Style="width:25%" class="fw-bold"> @langaugecontainer.Keys["Level Date"] </th>
+                                        <th Style="width:18%" class="fw-bold"> @langaugecontainer.Keys["Experience"] </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var selectItem in @obj_CandidateModel.CandidateSkills)
+                                    {
+                                            <tr>
+                                                <td>
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Success" @onclick="() => EditSkillValue(selectItem.CandidateNumber, selectItem.SkillERPRecId)" aria-label="delete" Size="Size.Small"></MudIconButton>
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Class="colorblue" @onclick="() => DeleteCandidateSkillAsync(selectItem.CandidateNumber, selectItem.SkillERPRecId)" aria-label="Edit" Size="Size.Small"></MudIconButton>
+                                                </td>
+                                                <td>
+                                                @selectItem.SkillCode
+                                                </td>
+                                                <td>
+                                                @selectItem.SkillLevelCode
+                                                </td>
+                                                <td>
+                                                @if (@selectItem.LevelDate != null && @selectItem.LevelDate.Value.ToShortDateString() != "1/1/1900")
+                                                {
+                                                    @selectItem.LevelDate.Value.ToShortDateString()
+                                                    ;
+                                                }
+                                                </td>
+                                                <td>
+                                                @selectItem.YearOfExperience
+                                                </td>
+                                            </tr>
+                                    }
+                                </tbody>
+                            </MudSimpleTable>
+                        </div>
+
+                    </MudCardContent>
+                </MudCard>
+            </div>
+        </div>
+        <div class="row gutters-sm">
+            <div class="col-sm-12 mb-3">
+                <MudCard Class="card mt-2">
+                    <MudCardHeader Class="pb-0 pt-0">
+                        <CardHeaderContent>
+                            <h6 Color="@Color.Success" class="colorblue"> @langaugecontainer.Keys["Certificate"] </h6>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudIconButton Icon="@Icons.Filled.Add" @onclick="() => ShowHidePopupDivision(4)" Color="Color.Default" />
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent Class="pt-0">
+                        <div class="card-block">
+                            <MudSimpleTable Hover="true" Dense="true" FixedHeader="true" Style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th Style="width:12%" class="fw-bold"> @langaugecontainer.Keys["Action"] </th>
+                                        <th Style="width:20%" class="fw-bold"> @langaugecontainer.Keys["Certificate Type"] </th>
+                                        <th Style="width:25%" class="fw-bold"> @langaugecontainer.Keys["Notes"]  </th>
+                                        <th Style="width:15%" class="fw-bold"> @langaugecontainer.Keys["From Date"]  </th>
+                                        <th Style="width:15%" class="fw-bold"> @langaugecontainer.Keys["To Date"] </th>
+                                        <th Style="width:13%" class="fw-bold"> @langaugecontainer.Keys["Renewal"]  </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var selectItem in @obj_CandidateModel.CandidateCertificateTypes)
+                                    {
+                                            <tr>
+
+                                                <td>
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Success" @onclick="() => EditCertiValue(selectItem.CandidateNumber, selectItem.CertificateTypeERPRecId)" aria-label="delete" Size="Size.Small"></MudIconButton>
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Class="colorblue" @onclick="() => DeleteCandidateCertificateAsync(selectItem.CandidateNumber, selectItem.CertificateTypeERPRecId)" aria-label="Edit" Size="Size.Small"></MudIconButton>
+                                                </td>
+                                                <td>
+                                                @selectItem.Code
+                                                </td>
+                                                <td>
+                                                @selectItem.Notes
+                                                </td>
+                                                <td>
+                                                @if (@selectItem.StartDate != null && @selectItem.StartDate.Value.ToShortDateString() != "1/1/1900")
+                                                {
+                                                    @selectItem.StartDate.Value.ToShortDateString()
+                                                    ;
+                                                }
+                                               @* else
+                                                {
+                                                    @selectItem.StartDate
+                                                }*@
+                                                </td>
+                                                <td>
+                                                @if (@selectItem.EndDate != null && @selectItem.EndDate.Value.ToShortDateString() != "1/1/1900")
+                                                {
+                                                    @selectItem.EndDate.Value.ToShortDateString()
+                                                    ;
+                                                }
+                                                @*else
+                                                {
+                                                    @selectItem.EndDate
+                                                }*@
+                                                </td>
+                                                <td>
+                                                @if (@selectItem.RenewalRequired == 1)
+                                                {
+                                                            <label>Yes</label>
+                                                }
+                                                else
+                                                {
+                                                            <label>No</label>
+                                                }
+                                                </td>
+                                            </tr>
+                                    }
+                                </tbody>
+                            </MudSimpleTable>
+                        </div>
+                    </MudCardContent>
+                </MudCard>
+            </div>
+        </div>
+
+    @*   <div class="modal @modalClass" tabindex="-1" role="dialog" style="display:@modalDisplay; overflow-y: auto; width:100% !important; margin-top:80px">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"> @langaugecontainer.Keys[@modalTitle] </h5>
+                        <MudButton Variant="Variant.Text" Class="btn-close" data-mdb-dismiss="modal" aria-label="Close" OnClick="Close"></MudButton>
+                    </div>
+                    <div class="modal-body">
+
+                         
+                        <MudButton Class="mt-5 mybuttonFixed" Variant="Variant.Filled" Color="Color.Default" OnClick="Close"> @langaugecontainer.Keys["Close"] </MudButton>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+     </MudCardContent>
+</MudCard>
+
+<MudDialog @bind-IsVisible="visible" Options="dialogOptions">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-3" /> @langaugecontainer.Keys[@modalTitle] 
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <EditForm Model="@obj_CandidateModelDTO" enctype="multipart/form-data">
+            
+            @*@if (@IsBasicInfoDiv)
+            {
+                <CandiateBasicInfo SCandidateEmail="@SCandidateEmail" OnEmployeeSelection="EmployeeSelectionChanged"></CandiateBasicInfo>
+            }*@
+            @if (@IsExperianceDiv)
+            {
+                <MudGrid>
+                    <MudItem xs="12" md="4" lg="3">
+                        <MudTextField Label="@langaugecontainer.Keys["Employer"]" Disabled="@(Employer == "" ? false : true)" @bind-Value="@obj_CandidateModelDTO.CandidateExperiences[0].Employer" MaxLength="50" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.BusinessCenter" Variant="Variant.Outlined" Margin="Margin.Dense" AdornmentColor="Color.Secondary"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="12" md="4" lg="3">
+                        <MudTextField Label="@langaugecontainer.Keys["Position"]" @bind-Value="@obj_CandidateModelDTO.CandidateExperiences[0].Position" MaxLength="30" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.AssignmentLate" Margin="Margin.Dense"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="12" md="4" lg="3">
+                        <MudTextField Label="@langaugecontainer.Keys["Internet Address"]" @bind-Value="@obj_CandidateModelDTO.CandidateExperiences[0].EmployerURL" MaxLength="256" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Attachment" Margin="Margin.Dense"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="12" md="4" lg="3">
+                        <MudTextField Label="@langaugecontainer.Keys["Telephone"]" @bind-Value="@obj_CandidateModelDTO.CandidateExperiences[0].EmployerContactNo" MaxLength="15" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.PhoneInTalk" Margin="Margin.Dense"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="12" md="4" lg="3">
+                        <MudTextField Label="@langaugecontainer.Keys["Location"]" @bind-Value="@obj_CandidateModelDTO.CandidateExperiences[0].EmployerLocation" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.AddLocation" MaxLength="50" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="12" md="4" lg="3">
+                        @*@bind-Date="@obj_CandidateModelDTO.CandidateExperiences[0].StartDate"*@
+                        <MudDatePicker Editable="true" Date="@obj_CandidateModelDTO.CandidateExperiences[0].StartDate" DateChanged="OnDateChangeStart" Label="@langaugecontainer.Keys["Start Date"]"
+                                   DateFormat="dd/MM/yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" Color="Color.Secondary" Rounded="true" AdornmentColor="Color.Secondary">
+                            @*DateChanged="ExperianceDateChange"*@
+                        </MudDatePicker>
+                    </MudItem>
+                    <MudItem xs="12" md="4" lg="3">
+                        @*@bind-Date="@obj_CandidateModelDTO.CandidateExperiences[0].EndDate"*@
+                        <MudDatePicker Editable="true" Date="@obj_CandidateModelDTO.CandidateExperiences[0].EndDate" DateChanged="OnDateChangeEnd" Label="@langaugecontainer.Keys["End Date"]"
+                                   DateFormat="dd/MM/yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" Color="Color.Info" Rounded="true">
+                            @*DateChanged="ExperianceDateChange"*@
+                        </MudDatePicker>
+                    </MudItem>
+
+                                <MudItem xs="12" md="4" lg="3">
+                                    <MudTextField Label="@langaugecontainer.Keys["Notes"]" @bind-Value="@obj_CandidateModelDTO.CandidateExperiences[0].Notes" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Person" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
+                                </MudItem>
+
+                            @* <MudItem xs="12" md="6" lg="3">
+                                <MudSwitch @bind-Checked="@obj_CandidateModelDTO.CandidateExperiences[0].IsSynced" Color="Color.Primary">Is Synced</MudSwitch>
+                                </MudItem>*@
+
+                            </MudGrid>
+                            <div Style="display:none">
+                                <MudTextField class="form-control" placeholder="Start Date" @bind-Value="@obj_CandidateModelDTO.CandidateExperiences[0].StartDate" MaxLength="10"></MudTextField>
+                                <MudTextField class="form-control" placeholder="End Date" @bind-Value="@obj_CandidateModelDTO.CandidateExperiences[0].EndDate" MaxLength="10"></MudTextField>
+                            </div>
+
+                    }
+
+                    @if (@IsEducationDiv)
+                    {
+
+                            <MudGrid>
+                                <MudItem xs="12" md="4" lg="3">
+                                    <MudSelect @bind-Value="obj_CandidateModelDTO.CandidateEducations[0].EducationERPRecId" Disabled="@(EducationERPRecId != 0 ? true : false)" Label="@langaugecontainer.Keys["Education"]" Variant="Variant.Outlined" Margin="Margin.Dense" AdornmentColor="Color.Secondary">
+                                    @foreach (var selectItem in obj_EducationDTO)
+                                    {
+                                        <MudSelectItem Value="@selectItem.ERPRecId"> @selectItem.Code </MudSelectItem>
+                                    }
+                            </MudSelect>
+                        </MudItem>
+
+                         <MudItem xs="12" md="4" lg="3">
+                            @*@bind-Date="@obj_CandidateModelDTO.CandidateExperiences[0].StartDate"*@
+                            <MudDatePicker  Editable="true" Date="@obj_CandidateModelDTO.CandidateEducations[0].StartDate" DateChanged="OnDateChangeStartEducation" Label="@langaugecontainer.Keys["Start Date"]"
+                                DateFormat="dd/MM/yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" Color="Color.Secondary" Rounded="true" AdornmentColor="Color.Secondary" >
+                                @*DateChanged="ExperianceDateChange"*@
+                                </MudDatePicker>
+                        </MudItem>
+                        <MudItem xs="12" md="4" lg="3"> 
+                            @*@bind-Date="@obj_CandidateModelDTO.CandidateExperiences[0].EndDate"*@
+                            <MudDatePicker Editable="true" Date="@obj_CandidateModelDTO.CandidateEducations[0].EndDate" DateChanged="OnDateChangeEndEducation" Label="@langaugecontainer.Keys["End Date"]"
+                                    DateFormat="dd/MM/yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" Color="Color.Info" Rounded="true" >
+                                @*DateChanged="ExperianceDateChange"*@
+                                </MudDatePicker>
+                        </MudItem>
+                        <MudItem xs="12" md="4" lg="3">
+                            <MudTextField Label="@langaugecontainer.Keys["Grade"]" @bind-Value="@obj_CandidateModelDTO.CandidateEducations[0].AvgGrade" MaxLength="10" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Grade" Variant="Variant.Outlined" Color="Color.Secondary" Rounded="true" Margin="Margin.Dense" />
+                        </MudItem>
+                        <MudItem xs="12" md="4" lg="3" class="invisible d-none">
+                            <MudTextField Label="@langaugecontainer.Keys["Scale"]" @bind-Value="@obj_CandidateModelDTO.CandidateEducations[0].Scale" MaxLength="10" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.CallMade" Color="Color.Secondary" Rounded="true" Variant="Variant.Outlined" Margin="Margin.Dense" />
+                        </MudItem>
+                    </MudGrid>
+
+                            <div Style="display:none">
+
+                                <MudTextField class="form-control" placeholder="Start Date" @bind-Value="@obj_CandidateModelDTO.CandidateEducations[0].StartDate" MaxLength="10" Margin="Margin.Dense"></MudTextField>
+                                <MudTextField class="form-control" placeholder="End Date" @bind-Value="@obj_CandidateModelDTO.CandidateEducations[0].EndDate" MaxLength="10" Margin="Margin.Dense"></MudTextField>
+                            </div>
+                    }
+
+                    @if (@IsSkillDiv)
+                    {
+                            <MudGrid>
+                                <MudItem xs="12" md="4" lg="4">
+                                    <MudSelect @bind-Value="obj_CandidateModelDTO.CandidateSkills[0].SkillERPRecId" Disabled="@(SkillERPRecId != 0 ? true : false)" Label="@langaugecontainer.Keys["Skill"]" Variant="Variant.Outlined" Margin="Margin.Dense" AdornmentColor="Color.Secondary">
+                                    @foreach (var selectItem in obj_SkillDTO)
+                                    {
+                                        <MudSelectItem Value="@selectItem.ERPRecId"> @selectItem.Code </MudSelectItem>
+                                    }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="12" md="4" lg="4">
+                            <MudSelect @bind-Value="obj_CandidateModelDTO.CandidateSkills[0].SkillLevelERPRecId" Label="@langaugecontainer.Keys["SkillLevel"]" Variant="Variant.Outlined" Margin="Margin.Dense">
+                                @foreach (var selectItem in obj_SkillLevelDTO)
+                                    {
+                                        <MudSelectItem Value="@selectItem.ERPRecId"> @selectItem.Code </MudSelectItem>
+                                    }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="12" md="4" lg="4">
+                            <MudDatePicker @bind-Date="@obj_CandidateModelDTO.CandidateSkills[0].LevelDate" Editable="true" Label="@langaugecontainer.Keys["LevelDate"]"
+                                           DateFormat="dd/MM/yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" placeholder="Level Date" Color="Color.Secondary" Rounded="true" AdornmentColor="Color.Secondary"></MudDatePicker>
+                        </MudItem>
+                        <MudItem xs="12" md="4" lg="4">
+                            <MudTextField Label="@langaugecontainer.Keys["Year Experiance"]" @bind-Value="@obj_CandidateModelDTO.CandidateSkills[0].YearOfExperience" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.ViewTimeline" Margin="Margin.Dense" MaxLength="20" />
+                        </MudItem>
+                        @*<MudItem xs="12" md="4" lg="3">
+                            <MudSwitch @bind-Checked="@obj_CandidateModelDTO.CandidateSkills[0].IsSynced" Color="Color.Primary">Is Synced</MudSwitch>
+                            </MudItem>*@
+                        <MudItem xs="12" md="4" lg="4">
+                            <div Style="display:none">
+                                <MudTextField class="form-control" placeholder="Level Date" @bind-Value="@obj_CandidateModelDTO.CandidateSkills[0].LevelDate" MaxLength="10" Margin="Margin.Dense" Color="Color.Secondary" Rounded="true"></MudTextField>
+                            </div>
+                        </MudItem>
+                    </MudGrid>
+                    }
+
+                    @if (@IsCertyDiv)
+                    {
+                        <MudGrid>
+                            <MudItem xs="12" md="4" lg="4">
+                                <MudSelect @bind-Value="obj_CandidateModelDTO.CandidateCertificateTypes[0].CertificateTypeERPRecId" Disabled="@(CertificateTypeERPRecId != 0 ? true : false)" Label="@langaugecontainer.Keys["Certificate Type"]" Variant="Variant.Outlined" Margin="Margin.Dense" AdornmentColor="Color.Secondary">
+                                @foreach (var selectItem in obj_CertificateTypeDTO)
+                                {
+                                    <MudSelectItem Value="@selectItem.ERPRecId"> @selectItem.Code </MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="12" md="4" lg="4">
+                            <MudTextField Label="@langaugecontainer.Keys["Notes"]" @bind-Value="@obj_CandidateModelDTO.CandidateCertificateTypes[0].Notes" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.FormatAlignJustify" Margin="Margin.Dense" MaxLength="256" />
+                        </MudItem>
+
+                         <MudItem xs="12" md="4" lg="3">
+                            <MudDatePicker  Editable="true" Date="@obj_CandidateModelDTO.CandidateCertificateTypes[0].StartDate" DateChanged="OnDateChangeStartCertificate" Label="@langaugecontainer.Keys["Start Date"]"
+                                DateFormat="dd/MM/yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" MaxDate="@DateTime.Today" Color="Color.Secondary" Rounded="true" AdornmentColor="Color.Secondary" >
+                                </MudDatePicker>
+                        </MudItem>
+                        <MudItem xs="12" md="4" lg="3"> 
+                            <MudDatePicker Editable="true" Date="@obj_CandidateModelDTO.CandidateCertificateTypes[0].EndDate" DateChanged="OnDateChangeEndCertificate" Label="@langaugecontainer.Keys["End Date"]"
+                                    DateFormat="dd/MM/yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" MaxDate="@DateTime.Today" Color="Color.Info" Rounded="true" >
+                                </MudDatePicker>
+                        </MudItem>
+
+                        <MudItem xs="12" md="4" lg="4">
+                            <MudSwitch @bind-Checked="obj_CandidateModelDTO.CandidateCertificateTypes[0].RenewalRequired" Color="Color.Primary">@langaugecontainer.Keys["Renewal Required"] </MudSwitch>
+                        </MudItem>
+                    </MudGrid>
+                            <div Style="display:none">
+                                <MudTextField class="form-control" placeholder="Start Date" @bind-Value="@obj_CandidateModelDTO.CandidateCertificateTypes[0].StartDate" MaxLength="10" Margin="Margin.Dense"></MudTextField>
+                                <MudTextField class="form-control" placeholder="End Date" @bind-Value="@obj_CandidateModelDTO.CandidateCertificateTypes[0].EndDate" MaxLength="10" Margin="Margin.Dense"></MudTextField>
+                            </div>
+                    }
+                </EditForm>
+              </DialogContent>
+    <DialogActions>
+                @if (@IsExperianceDiv)
+                {
+                        <div style="float: right">
+                            <MudButton Class="mt-5" Variant="Variant.Filled" Color="Color.Success" OnClick="AddEditCandidateExperienceAsync"> @ButtonTitle </MudButton>
+                            <MudButton Class="mt-5" Variant="Variant.Filled" Color="Color.Default" OnClick="Close"> @langaugecontainer.Keys["Close"] </MudButton>
+                        </div>
+                }
+                @if (@IsEducationDiv)
+                {
+                        <div style="float: right">
+                            <MudButton Class="mt-5" Variant="Variant.Filled" Color="Color.Success" OnClick="AddEditCandidateEducationAsync"> @ButtonTitle </MudButton>
+                            <MudButton Class="mt-5" Variant="Variant.Filled" Color="Color.Default" OnClick="Close"> @langaugecontainer.Keys["Close"] </MudButton>
+                        </div>
+                }
+                @if (@IsSkillDiv)
+                {
+                        <div style="float: right">
+                            <MudButton Class="mt-5" Variant="Variant.Filled" Color="Color.Success" OnClick="AddEditCandidateSkillAsync"> @ButtonTitle </MudButton>
+                            <MudButton Class="mt-5" Variant="Variant.Filled" Color="Color.Default" OnClick="Close"> @langaugecontainer.Keys["Close"] </MudButton>
+                        </div>
+                }
+                @if (@IsCertyDiv)
+                {
+                        <div style="float: right">
+                            <MudButton Class="mt-5" Variant="Variant.Filled" Color="Color.Success" OnClick="AddEditCandidateCertificateAsync"> @ButtonTitle </MudButton>
+                            <MudButton Class="mt-5" Variant="Variant.Filled" Color="Color.Default" OnClick="Close"> @langaugecontainer.Keys["Close"] </MudButton>
+                        </div>
+                }
+            </DialogActions>
+</MudDialog>
+
+@if (showBackdrop)
+{
+        <div class="modal-backdrop fade show"></div>
+}
+<style>
+ .modal {
+        overflow: hidden;
+    }
+
+    .modal-body {
+        overflow: auto;
+    }
+
+    .modal-scrollbar-measure {
+        overflow: hidden !Important;
+    }
+    .mud-icon-button-color-secondary .mud-icon-button-label {
+        color: #A1263E !important;
+    }
+
+    .mud-icon-button-color-success .mud-icon-button-label {
+        color: #00c853 !important;
+    }
+
+
+    .ProfilePicSize{width:120px; height:120px}
+
+    .mud-dialog-width-sm {
+        max-width: 100% !important;
+    }
+    
+    .mud-typography-h6{
+    color:#424242ff !important;
+    }
+</style>
+

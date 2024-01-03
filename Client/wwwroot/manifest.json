@@ -1,0 +1,28 @@
+{
+  "name": "Candidate Portal",
+  "short_name": "CandidatePortal",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#03173d",
+  "prefer_related_applications": false,
+  "icons": [
+    //{
+    //  "src": "maroon-logo.png",
+    //  "type": "image/png",
+    //  //"sizes": "342x342"
+    //  "sizes": "264x82"
+    //}
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ]
+}
+//Ashvin 20-06-2022

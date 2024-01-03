@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>F:\RadixWork\Projects\CandidatePortal\Server\bin\Release\net6.0\publish\</_PublishTargetUrl>
+    <History>True|2022-12-19T12:33:54.1066857Z;False|2022-12-19T18:00:29.9588466+05:30;False|2022-12-19T17:50:20.0787624+05:30;False|2022-12-19T17:43:40.8904695+05:30;False|2022-12-19T17:42:54.7818644+05:30;False|2022-12-19T17:25:13.2329813+05:30;False|2022-12-19T17:24:19.5779959+05:30;False|2022-12-19T17:23:37.0821119+05:30;False|2022-12-19T14:18:59.2379019+05:30;False|2022-12-19T14:17:29.8711574+05:30;False|2022-12-19T13:58:06.9777214+05:30;False|2022-12-19T13:52:45.3237913+05:30;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

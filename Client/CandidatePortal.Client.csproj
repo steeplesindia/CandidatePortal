@@ -1,0 +1,79 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<!--<Nullable>enable</Nullable>-->
+		<ImplicitUsings>enable</ImplicitUsings>
+		<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="Pages\FetchData.razor.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Remove="Componets\CandidateProfileEdit.razor" />
+		<Content Remove="Componets\UserPhotoComponent.razor" />
+		<Content Remove="Pages\Counter.razor" />
+		<Content Remove="Pages\FetchData.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="Resources\ar-AE.yml" />
+		<None Remove="Resources\bn-IN.yml" />
+		<None Remove="Resources\en-US.yml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\ar-AE.yml" />
+		<EmbeddedResource Include="Resources\bn-IN.yml" />
+		<EmbeddedResource Include="Resources\en-US.yml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AKSoftware.Localization.MultiLanguages" Version="5.3.0" />
+		<PackageReference Include="Blazored.TextEditor" Version="1.0.8" />
+		<PackageReference Include="Faso.Blazor.SpinKit" Version="1.0.1" />
+		<PackageReference Include="HtmlSanitizer" Version="7.1.512" />
+		<PackageReference Include="Mapster" Version="7.3.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.6" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.2" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Authentication.WebAssembly.Msal" Version="6.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+		<PackageReference Include="MudBlazor" Version="6.0.7" />
+		<PackageReference Include="ProtectedBrowserStorage.NETStandard" Version="1.1.2" />
+		<PackageReference Include="Tewr.Blazor.FileReader" Version="3.3.1.21360" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Shared\CandidatePortal.Shared.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<TrimmerRootAssembly Include="Microsoft.Authentication.WebAssembly.Msal" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="Componets\CandidateProfileEdit.razor" />
+		<None Include="Componets\UserPhotoComponent.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Componets\UserPhotoComponent.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="Componets\UserPhotoComponent.razor" />
+	</ItemGroup>
+</Project>

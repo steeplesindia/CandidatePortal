@@ -1,0 +1,112 @@
+﻿@page "/joblisting"
+
+
+@using CandidatePortal.Client.Componets
+
+<MudBreadcrumbs Items="@_items">
+    <ItemTemplate Context="item">  
+    @if (@item.Text.ToLower() == "home")
+    {
+        <MudLink Href="@item.Href" Class="colorblue"><MudIcon Class="ma-4" Icon="@Icons.Material.Filled.Home"  /> @langaugecontainer.Keys["Home"]</MudLink>  
+    }
+    else if (@item.Text.ToLower() == "job listing")
+    {
+        <MudLink Href="@item.Href" Disabled="true"> <MudIcon Class="ma-4" Icon="@Icons.Filled.Ballot"  /> @langaugecontainer.Keys["Job Listing"]</MudLink>  
+    }
+    </ItemTemplate> 
+</MudBreadcrumbs>
+
+@if(IsLoding)
+{
+    <AsyncLoader />
+}
+
+<MudPaper Class="pa-5 my-2 mt-5" Elevation="2">
+    @*<MudText Typo="Typo.h5" Class="colorblue mb-2">Search Job</MudText>*@
+    <MudGrid Class="d-flex pt-2">
+        <MudItem xs="12" sm="6" md="4" lg="4">
+            <MudTextField  Class="rounded-xl mt-0" @bind-Value="_SearchText" Placeholder="@langaugecontainer.Keys["Search by skills / designation / company name"]" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Search" Margin="Margin.Dense"/>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4" lg="4">
+            <MudTextField  Class="rounded-xl mt-0" @bind-Value="_SearchLocationText" Placeholder="@langaugecontainer.Keys["Search by location"]" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Search" Margin="Margin.Dense"/>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="2" lg="2">
+             <MudIconButton Class="mt-0 ml-3" Icon="@Icons.Material.Outlined.Search" Variant="Variant.Outlined" OnClick="SearchJob" Size="Size.Medium" />
+             <MudIconButton Class="mt-0 ml-3" Icon="@Icons.Material.Outlined.Close" Variant="Variant.Outlined" OnClick="GetDefaultJobList" Size="Size.Medium" />
+             @*<MudButton Class="mt-0 ml-3" Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.Search" OnClick="SearchJob"> </MudButton>
+            <MudButton Class="mt-0 ml-3" Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.Close" OnClick="GetDefaultJobList"> </MudButton>*@
+        </MudItem>
+        @*<MudItem xs="12" sm="6" md="2" lg="2" Class="d-none d-sm-block">
+          <MudToggleIconButton Toggled="@AlarmOn" ToggledChanged="OnToggledChanged" Variant="Variant.Outlined" Class="floatright"
+                     Icon="@Icons.Material.Filled.GridView" Color="@Color.Default" Title="Grid View" Style="color: #A1263E !important;"
+                     ToggledIcon="@Icons.Material.Filled.Splitscreen" ToggledColor="@Color.Default" ToggledTitle="Full View" />
+        </MudItem>*@
+    </MudGrid>
+
+    @if(bShowAdvSearch)
+    {
+        <MudText Class="d-flex pt-2" Typo="Typo.body1"><b>Advance Search</b></MudText>
+        <MudGrid Class="d-flex pt-2">
+            <MudItem xs="12" sm="4" md="3">
+                <MudSelect @bind-Value="enumStatus" Label="Employement Type" OpenIcon="@Icons.Outlined.Man" Variant="Variant.Outlined" nmentColor="Color.Dark"  Margin="Margin.Dense">
+                    @foreach (ApplicationStatus item in Enum.GetValues(typeof(ApplicationStatus)))
+                    {
+                        <MudSelectItem Value="@item">@item</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" sm="4" md="3">
+                <MudSelect @bind-Value="enumStatus" Label="Salary Estimate" OpenIcon="@Icons.Outlined.CurrencyRupee" Variant="Variant.Outlined" AdornmentColor="Color.Dark"  Margin="Margin.Dense">
+                    @foreach (ApplicationStatus item in Enum.GetValues(typeof(ApplicationStatus)))
+                    {
+                        <MudSelectItem Value="@item">@item</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" sm="4" md="3">
+                <MudSelect @bind-Value="enumStatus" Label="Job Type" OpenIcon="@Icons.Outlined.Deblur" Variant="Variant.Outlined" AdornmentColor="Color.Dark" Margin="Margin.Dense">
+                    @foreach (ApplicationStatus item in Enum.GetValues(typeof(ApplicationStatus)))
+                    {
+                        <MudSelectItem Value="@item">@item</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" sm="4" md="3">
+                <MudSelect @bind-Value="enumStatus" Label="Education level" OpenIcon="@Icons.Outlined.School" Variant="Variant.Outlined" AdornmentColor="Color.Dark" Margin="Margin.Dense">
+                    @foreach (ApplicationStatus item in Enum.GetValues(typeof(ApplicationStatus)))
+                    {
+                        <MudSelectItem Value="@item">@item</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+        </MudGrid>
+    }
+
+</MudPaper>
+
+
+<MudCard>
+    <MudGrid Class="mt-2">
+        @foreach (var item in lstJob)
+        {
+            <JobListingCard JobDTO="item" JobView="JobView" ApplyButton="1"></JobListingCard>    
+        }
+    </MudGrid>
+
+ <div class="row mt-5">
+    <div class="col">
+        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" />
+    </div>
+</div>
+
+    @*<div class="d-flex flex-column align-center my-3">
+        <MudPagination Color="Color.Primary" Count="10" @bind-Selected="@_selected" Class="" Variant="Variant.Filled" ShowFirstButton="true" ShowLastButton="true" />
+    </div>*@
+</MudCard>
+
+<style>
+:root{
+--mud-typography-body2-size : 0.80rem !important;
+}
+</style>

@@ -1,0 +1,229 @@
+﻿@page "/ApplicationChecklistUpdate/{Number:long}/{ApplicationNumber:long}"
+@layout MainLayout
+@using Blazored.TextEditor
+@using CandidatePortal.Client.Componets
+
+<MudBreadcrumbs Items="@_items">
+     <ItemTemplate Context="item"> 
+    @if (@item.Text.ToLower() == "home")
+    {
+        <MudLink Href="@item.Href"  Class="colorblue"><MudIcon Class="ma-4" Icon="@Icons.Material.Filled.Home" /> @langaugecontainer.Keys["Home"]</MudLink>  
+    }
+    else if (@item.Text.ToLower() == "application checklist")
+    {
+        <MudLink Href="@item.Href"  Class="colorblue"> <MudIcon Class="ma-4" Icon="@Icons.Material.Filled.AdsClick" /> @langaugecontainer.Keys["Application Checklist"]</MudLink>  
+    }
+    else if (@item.Text.ToLower() == "application checklist update")
+    {
+        <MudLink Href="@item.Href" Disabled="true"> <MudIcon Class="ma-4" Icon="@Icons.Material.Filled.AdsClick"/> @langaugecontainer.Keys["Application Checklist Update"]</MudLink>  
+    }
+    </ItemTemplate>
+</MudBreadcrumbs>
+
+@if(IsLoding)
+{
+    <AsyncLoader />
+}
+
+<MudPaper Class="pa-5 my-2 mt-5" Elevation="2">
+    <EditForm Model="@AppsCommModel" enctype="multipart/form-data" OnValidSubmit="AddApplicationCommunicationAsync">
+        <div>
+            <MudGrid Class="mb-5">
+
+                <MudItem xs="12" sm="12" md="12" lg="12">
+                    <MudText Typo="Typo.body1"> <b class="colorblue"> @langaugecontainer.Keys["Subject"]:</b>  @AppsCommModel.Subject </MudText>
+
+                </MudItem>
+                <MudItem xs="12" sm="12" md="12" lg="12">
+                    <MudText Typo="Typo.body1" > <b class="colorblue"> @langaugecontainer.Keys["Description"]:</b> @AppsCommModel.Description </MudText>
+                </MudItem>
+
+                @if (AppsCommModelData.Completed == 1)
+                {
+                    <MudItem xs="12" sm="12" md="12" lg="12" Class="mb-5">
+                        <MudText Typo="Typo.body1"> <b class="colorblue"> @langaugecontainer.Keys["Reamrks"]:</b>  @((MarkupString)AppsCommModel.Remarks) </MudText>
+                    </MudItem>
+                }
+
+                @if (AppsCommModelData.ApplicationChecklistDocumentDTOs != null && AppsCommModelData.ApplicationChecklistDocumentDTOs.Count() > 0)
+                {
+                    <MudItem xs="12" md="12" lg="12" Class="pt-0 mt-3">
+                        <MudText Typo="Typo.body1" class="colorblue"> <b> @langaugecontainer.Keys["Uploaded Attachments"]: </b>  </MudText>
+                        <MudSimpleTable Hover="true" Dense="true" FixedHeader="true" Style="width:100%; height: auto !important; margin-top: 6px;">
+                            <thead class="headerback" style="border-top-right-radius: 10px; border-top-left-radius: 10px;">
+                                <tr>
+                                    <th Style="width:10%; border-top-left-radius: 10px;" class="fw-bold headerback" > </th>
+                                    <th Style="width:90%; border-top-right-radius: 10px;" class="fw-bold headerback"> @langaugecontainer.Keys["Document Name"]  </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var selectItem in @AppsCommModelData.ApplicationChecklistDocumentDTOs)
+                                {
+                                    <tr>
+                                        <td>
+                                            @if (getFileExtension(selectItem.DocumentName) == ".pdf")
+                                            {
+                                                <MudCardMedia Image="./Images/pngs/icons8-pdf-96.png" class="rounded-circle" Style="height:30px; width:30px" />
+                                            }
+                                            else @if (getFileExtension(selectItem.DocumentName) == ".doc")
+                                            {
+                                                <MudCardMedia Image="./Images/pngs/icons8-microsoft-word-2019-96.png" class="rounded-circle" Style="height:30px; width:30px" />
+                                            }
+                                            else @if (getFileExtension(selectItem.DocumentName) == ".word")
+                                            {
+                                                <MudCardMedia Image="./Images/pngs/icons8-microsoft-word-2019-96.png" class="rounded-circle" Style="height:30px; width:30px" />
+                                            }
+                                            else
+                                            {
+                                                <MudCardMedia Image="./Images/pngs/icons8-image-48.png" class="rounded-circle" Style="height:30px; width:30px" />
+                                            }
+                                        </td>
+                                        <td>
+
+                                            <MudButton Variant="Variant.Text" StartIcon="@Icons.Filled.DownloadForOffline" @onclick="() => Download(selectItem.DocumentPath)" Style="text-transform:none; colorblue">  @selectItem.DocumentName </MudButton>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </MudSimpleTable>
+                    </MudItem>
+                }
+
+                @if (AppsCommModelData.Completed == 0)
+                {
+                    <MudItem xs="12" sm="12" md="12" lg="12" Class="mb-5">
+                        <MudText Typo="Typo.body1"> <b> @langaugecontainer.Keys["Remarks"]: </b>  </MudText>
+                        <BlazoredTextEditor @ref="@QuillHtml">
+                            <ToolbarContent>
+                                <select class="ql-header">
+                                    <option selected=""></option>
+                                    <option value="1"></option>
+                                    <option value="2"></option>
+                                    <option value="3"></option>
+                                    <option value="4"></option>
+                                    <option value="5"></option>
+                                </select>
+                                <span class="ql-formats">
+                                    <button class="ql-bold"></button>
+                                    <button class="ql-italic"></button>
+                                    <button class="ql-underline"></button>
+                                    <button class="ql-strike"></button>
+                                </span>
+                                <span class="ql-formats">
+                                    <select class="ql-color"></select>
+                                    <select class="ql-background"></select>
+                                </span>
+                                <span class="ql-formats">
+                                    <button class="ql-list" value="ordered"></button>
+                                    <button class="ql-list" value="bullet"></button>
+                                </span>
+                                <span class="ql-formats">
+                                    <button class="ql-link"></button>
+                                </span>
+                            </ToolbarContent>
+                            <EditorContent>
+                                @((MarkupString)AppsCommModel.Remarks)
+                            </EditorContent>
+                        </BlazoredTextEditor>
+                    </MudItem>
+                }
+
+                <MudItem xs="12" sm="12" md="12" lg="12">
+                    <MudCard>
+                        <MudCardContent Style="padding: 5px; margin-top:35px;">
+                            <MudText Typo="Typo.body1"> <b> @langaugecontainer.Keys["Upload Document"] </b>: </MudText>
+                            <MudGrid>
+                                <MudItem xs="12" md="6" lg="6" Class="pt-0">
+                                  
+                                    @if(IsLodingDoc)
+                                    {
+                                        <AsyncMiniLoader />
+                                    }
+                                    <MudPaper Disabled="@(AppsCommModelData.Completed == 1 ? true  : false)" @ondragenter="@SetDragClass" @ondragleave="@ClearDragClass" @ondragend="@ClearDragClass" Height="150px" Outlined="true" Class="@DragClass">
+                                        @if (!Clearing)
+                                        {
+                                            <InputFile Disabled="@(AppsCommModelData.Completed == 1 ? true  : false)" OnChange="UploadDocuments" multiple class="absolute mud-width-full mud-height-full overflow-hidden z-2" style="opacity:0;" />
+                                        }
+                                        <MudText Typo="Typo.body1" Class="colorblue ml-3">@langaugecontainer.Keys["Drag and drop files here or click"]</MudText>
+                                        @foreach (var file in fileNames)
+                                        {
+                                            <MudChip Color="Color.Dark" Text="@file" />
+                                        }
+                                    </MudPaper>
+                                    @*}*@
+                                </MudItem>
+
+                                @if (@AppsCommModel.ApplicationChecklistDocumentDTOs.Count() > 0)
+                                {
+                                    <MudItem xs="12" md="6" lg="6" Class="pt-0">
+                                        <MudSimpleTable Hover="true" Dense="true" FixedHeader="true" Style="width:100%; height:250px !important">
+                                            <thead>
+                                                <tr>
+                                                    <th Style="width:12%" class="fw-bold"> @langaugecontainer.Keys["Action"]  </th>
+                                                    <th Style="width:18%" class="fw-bold"> </th>
+                                                    <th Style="width:70%" class="fw-bold"> @langaugecontainer.Keys["Document Name"]  </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var selectItem in @AppsCommModel.ApplicationChecklistDocumentDTOs)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" @onclick="() => DeleteDocumentFile(selectItem)" aria-label="Edit" Size="Size.Small"></MudIconButton>
+                                                        </td>
+                                                        <td>
+                                                            @if (getFileExtension(selectItem.DocumentName) == ".pdf")
+                                                            {
+                                                                <MudCardMedia Image="./Images/pngs/icons8-pdf-96.png" class="rounded-circle" Style="height:30px; width:30px" />
+                                                            }
+                                                            else @if (getFileExtension(selectItem.DocumentName) == ".doc")
+                                                            {
+                                                                <MudCardMedia Image="./Images/pngs/icons8-microsoft-word-2019-96.png" class="rounded-circle" Style="height:30px; width:30px" />
+                                                            }
+                                                            else @if (getFileExtension(selectItem.DocumentName) == ".word")
+                                                            {
+                                                                <MudCardMedia Image="./Images/pngs/icons8-microsoft-word-2019-96.png" class="rounded-circle" Style="height:30px; width:30px" />
+                                                            }
+                                                            else @if (getFileExtension(selectItem.DocumentName) == ".xlsx" || getFileExtension(selectItem.DocumentName) == ".xls")
+                                                            {
+                                                                <MudCardMedia Image="./Images/pngs/icons8-microsoft-excel-2019-48.png" class="rounded-circle" Style="height:30px; width:30px" />
+                                                            }   
+                                                            else 
+                                                            {
+                                                                <MudCardMedia Image="./Images/pngs/icons8-image-48.png" class="rounded-circle" Style="height:30px; width:30px" />
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @selectItem.DocumentName
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </MudSimpleTable>
+                                    </MudItem>
+                                }
+                            </MudGrid>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="4" lg="3" Style="@(AppsCommModel.Remarks != null && AppsCommModel.Remarks != "" ? "margin-top:0px" : "margin-top:40px")">
+                    <MudSwitch @bind-Checked="@AppsCommModel.Completed" Disabled="@(AppsCommModelData.Completed == 1 ? true : false)" Color="Color.Secondary" Label="@langaugecontainer.Keys["Completed"]" />
+                </MudItem>
+            </MudGrid>
+        </div>
+        <div class="modal-footer" style="margin-top: 75px;">
+            <div style="float: right">
+                @if (AppsCommModelData.Completed == 0)
+                {
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success">@langaugecontainer.Keys["Submit"]</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="BackToCheckList"> @langaugecontainer.Keys["Back"] </MudButton>
+                }
+                else
+                {
+                    <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="BackToCheckList"> @langaugecontainer.Keys["Back"] </MudButton>
+                }
+            </div>
+        </div>
+    </EditForm>
+</MudPaper>

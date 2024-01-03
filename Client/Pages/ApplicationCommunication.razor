@@ -1,0 +1,268 @@
+﻿@page "/AppsCommunication/{ApplicationNumber:long}"
+@layout MainLayout
+@using Blazored.TextEditor
+@using CandidatePortal.Client.Componets
+@using CandidatePortal.Client.Model
+
+<MudBreadcrumbs Items="@_items">
+    <ItemTemplate Context="item">  
+        @if (@item.Text.ToLower() == "home")
+        {
+            <MudLink Href="@item.Href"  Class="colorblue"><MudIcon Class="ma-4" Icon="@Icons.Material.Filled.Home"/> @langaugecontainer.Keys["Home"]</MudLink>  
+        }
+        else if (@item.Text.ToLower() == "appliedjob")
+        {
+            <MudLink Href="@item.Href"  Class="colorblue"> <MudIcon Class="ma-4" Icon="@Icons.Material.Filled.AdsClick"/> @langaugecontainer.Keys["Applied Job"]</MudLink>  
+        }
+        else if (@item.Text.ToLower() == "application communication")
+        {
+            <MudLink Href="@item.Href" Disabled="true"> <MudIcon Class="ma-4" Icon="@Icons.Material.Filled.AdsClick" /> @langaugecontainer.Keys["Application Communication"]</MudLink>  
+        }
+    </ItemTemplate>
+</MudBreadcrumbs>
+
+
+@if(IsLoding)
+{
+    <AsyncLoader />
+}
+
+<MudText Typo="Typo.body1" Class="colorblue">
+    <MudIcon Icon="@Icons.Filled.Api" Title="Description" Class="d-inline" Color="Color.Dark" />
+    <b> @obj_JobAppliedDTO.Code </b>
+</MudText>
+
+<MudCard>
+    @foreach (var item in obj_AppsCommModelList)
+    {
+        <MudGrid Class="mt-2">
+            <MudItem xs="12" sm="12" md="12">
+                <MudCard Elevation="4" Class="rounded-lg" Style="@SetDirectionalStyle(item.CommunicationDirection)">
+                    <MudCardHeader Style="padding: 8px !important; width:100%; overflow-x:auto !important">
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.body1" Class="colorblue ml-3"><b>@item.Subject</b></MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudDivider></MudDivider>
+                    <MudCardContent style="height:auto">
+                         <MudGrid Class="mt-2">
+                            <MudItem xs="12" sm="12" md="12" Style="width:100%; overflow-x:auto !important">
+                                <div class="mb-2">
+                                    <MudText Class="d-inline pa-2" Typo="Typo.body2">
+                                        @((MarkupString)(MarkupStringSanitized)item.Message)
+                                    </MudText>
+                                </div>
+                                <div class="mb-2 mt-3">
+                                    @if (item.ApplicationCommunicationDocumentAddDTO.Count() > 0)
+                                    {
+                                        @*<MudText Class="d-inline pa-2 mb-4 colorblue"> Attachment:  </MudText>*@
+
+                                        @foreach (var selectItem in item.ApplicationCommunicationDocumentAddDTO)
+                                        {
+                                            <MudButton Variant="Variant.Text" StartIcon="@Icons.Filled.DownloadForOffline" @onclick="() => Download(selectItem.DocumentPath)" Style="text-transform:none; colorblue">  @selectItem.DocumentName </MudButton>
+                                        }
+                                    }
+                                </div>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                    <MudDivider></MudDivider>
+                    <MudCardActions Class="d-flex justify-end" Style="padding: 8px !important;">
+                        <MudIcon Icon="@Icons.Filled.DateRange" Title="Submitted Date" Class="d-inline" Color="Color.Dark" />
+                        <MudText Class="d-inline pa-2" Typo="Typo.body2">
+                            <b>@langaugecontainer.Keys["Submitted Date"] : </b>
+                            @if (@item.SubmittedDateTime != null)
+                            {
+                                @item.SubmittedDateTime.Value.ToShortDateString();
+                            }
+                        </MudText>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    }
+</MudCard>
+
+<MudPaper Class="pa-5 my-2 mt-5" Elevation="2">
+    <EditForm Model="@AppsCommModel" enctype="multipart/form-data" OnValidSubmit="AddApplicationCommunicationAsync">
+        <div>
+            <MudGrid>
+                <MudItem xs="12" sm="6" md="12" lg="12">
+                    <MudTextField Label="Subject" @bind-Value="AppsCommModel.Subject" MaxLength="50" Adornment="Adornment.End"
+                                  AdornmentIcon="@Icons.Filled.Article" Variant="Variant.Outlined" Margin="Margin.Dense" For="@(() => AppsCommModel.Subject)" />
+                </MudItem>
+
+                <MudItem xs="12" sm="12" md="12" lg="12">
+                    <MudText Typo="Typo.body1"> <b>@langaugecontainer.Keys["Remarks"]:</b>  </MudText>
+
+                    <BlazoredTextEditor @ref="@QuillHtml">
+                        <ToolbarContent>
+                            <select class="ql-header">
+                                <option selected=""></option>
+                                <option value="1"></option>
+                                <option value="2"></option>
+                                <option value="3"></option>
+                                <option value="4"></option>
+                                <option value="5"></option>
+                            </select>
+                            <span class="ql-formats">
+                                <button class="ql-bold"></button>
+                                <button class="ql-italic"></button>
+                                <button class="ql-underline"></button>
+                                <button class="ql-strike"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <select class="ql-color"></select>
+                                <select class="ql-background"></select>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-list" value="ordered"></button>
+                                <button class="ql-list" value="bullet"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-link"></button>
+                            </span>
+                        </ToolbarContent>
+                        <EditorContent>
+                            @((MarkupString)AppsCommModel.Message)
+                        </EditorContent>
+                    </BlazoredTextEditor>
+                </MudItem>
+
+                <MudItem xs="12" md="12" lg="12" Class="mt-5" style="margin-top:45px !important">
+                    <MudCard>
+
+                        @if(IsLodingDoc)
+                        {
+                            <AsyncMiniLoader />
+                        }
+
+                        <MudText Typo="Typo.body1"> <b>  @langaugecontainer.Keys["Upload Document"]:  </b> </MudText>
+                        <MudCardContent Style="padding: 5px;" id="loading">
+                            <MudGrid>
+                                <MudItem xs="12" md="6" lg="6" Class="pt-0">
+                                    @*   @if(IsLoaderShow == true)
+                                        {
+                                        <img src="~/Images/processing.gif" alt="Please wait.." />
+                                        }
+                                        else
+                                        {*@
+                                    <MudPaper @ondragenter="@SetDragClass" @ondragleave="@ClearDragClass" @ondragend="@ClearDragClass" Height="200px" Outlined="true" Class="@DragClass">
+                                        @if (!Clearing)
+                                        {
+                                            <InputFile OnChange="UploadDocuments" multiple class="absolute mud-width-full mud-height-full overflow-hidden z-2" style="opacity:0;" />
+                                        }
+                                        <MudText Typo="Typo.body1" Class="colorblue ml-3">@langaugecontainer.Keys["Drag and drop files here or click"]</MudText>
+                                        @foreach (var file in fileNames)
+                                        {
+                                            <MudChip Color="Color.Dark" Text="@file" />
+                                        }
+                                    </MudPaper>
+                                    @*}*@
+                                </MudItem>
+
+                                @if (@AppsCommModel.ApplicationCommunicationDocumentAddDTO.Count() > 0)
+                                {
+                                    <MudItem xs="12" md="6" lg="6" Class="pt-0">
+                                        <MudSimpleTable Hover="true" Dense="true" FixedHeader="true" Style="width:100%; height:250px !important">
+                                            <thead>
+                                                <tr>
+                                                    <th Style="width:12%" class="fw-bold"> @langaugecontainer.Keys["Action"]  </th>
+                                                    <th Style="width:18%" class="fw-bold"> </th>
+                                                    <th Style="width:70%" class="fw-bold"> @langaugecontainer.Keys["Document Name"]  </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var selectItem in @AppsCommModel.ApplicationCommunicationDocumentAddDTO)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" @onclick="() => DeleteDocumentFile(selectItem)" aria-label="Edit" Size="Size.Small"></MudIconButton>
+                                                        </td>
+                                                        <td>
+                                                            @if (Path.GetExtension(selectItem.DocumentName) == ".pdf")
+                                                            {
+                                                                <MudCardMedia Image="./Images/pdf.png" class="rounded-circle" Style="height:30px; width:30px" />
+                                                            }
+                                                            else @if (Path.GetExtension(selectItem.DocumentName) == ".doc" || Path.GetExtension(selectItem.DocumentName) == ".docx")
+                                                            {
+                                                                <MudCardMedia Image="./Images/word.png" class="rounded-circle" Style="height:30px; width:30px" />
+                                                            }
+                                                            else @if (Path.GetExtension(selectItem.DocumentName) == ".xls" || Path.GetExtension(selectItem.DocumentName) == ".xlsx")
+                                                            {
+                                                                <MudCardMedia Image="./Images/excel.png" class="rounded-circle" Style="height:30px; width:30px" />
+                                                            }
+                                                            else @if (Path.GetExtension(selectItem.DocumentName) == ".rar")
+                                                            {
+                                                                <MudCardMedia Image="./Images/rar.png" class="rounded-circle" Style="height:30px; width:30px" />
+                                                            }
+                                                            else @if (Path.GetExtension(selectItem.DocumentName) == ".zip")
+                                                            {
+                                                                <MudCardMedia Image="./Images/zip.png" class="rounded-circle" Style="height:30px; width:30px" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <MudCardMedia Image="./Images/image.png" class="rounded-circle" Style="height:30px; width:30px" />
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @selectItem.DocumentName
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </MudSimpleTable>
+                                    </MudItem>
+                                }
+                            </MudGrid>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            </MudGrid>
+        </div>
+        <div class="modal-footer" style="margin-top: 75px;">
+            <div style="float: right">
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success">@langaugecontainer.Keys["Submit"] </MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="OnInitializedAsync"> @langaugecontainer.Keys["Cancel"] </MudButton>
+            </div>
+        </div>
+    </EditForm>
+</MudPaper>
+
+
+@*
+    @if (item.CommunicationDirection == 1)
+    {
+
+    }
+    else
+    {
+    <MudGrid Class="mt-2">
+    <MudItem xs="12" sm="12" md="12">
+    <MudCard Elevation="4" Class="rounded-lg" Style="width:60% !important; float:left !important">
+    <MudCardHeader Style="padding: 8px !important;">
+    <CardHeaderContent>
+    <MudText Typo="Typo.body1" Class="colorblue ml-3"><b>@item.Subject</b></MudText>
+    </CardHeaderContent>
+    </MudCardHeader>
+    <MudDivider></MudDivider>
+    <MudCardContent style="height:auto">
+    <div class="mb-2">
+
+    <MudText Class="d-inline pa-2" Typo="Typo.body2"> @item.Message </MudText>
+    </div>
+    </MudCardContent>
+    <MudDivider></MudDivider>
+    <MudCardActions Class="d-flex justify-end" Style="padding: 8px !important;">
+    <MudIcon Icon="@Icons.Filled.DateRange" Title="Submitted Date" Class="d-inline" Color="Color.Dark" />
+    <MudText Class="d-inline pa-2" Typo="Typo.body2">
+    <b>Submitted Date : </b>
+
+    @item.SubmittedDateTime.ToString().Substring(0, 8)
+
+    </MudText>
+    </MudCardActions>
+    </MudCard>
+    </MudItem>
+    </MudGrid>
+    }*@

@@ -1,0 +1,254 @@
+﻿@if (@JobView == 0)
+{
+    <MudItem xs="12" sm="6" md="6">
+        <MudCard Elevation="4" Class="rounded-lg">
+            <MudCardHeader>
+                @*<CardHeaderAvatar>
+                    <MudAvatar Image="icon-192.png" Size="Size.Medium" Elevation="4" Color="Color.Dark" />
+                </CardHeaderAvatar>*@
+                <CardHeaderContent>
+                    <MudText Class="colorblue"><b> @JobAppliedDTO.Code </b></MudText>
+                </CardHeaderContent>
+                 <CardHeaderActions>
+                     <MudButtonGroup Variant="Variant.Text">
+                        <MudIconButton Class="mt-3 colorblue" Style="color: #a1263e !important;" Title="View Job" Icon="@Icons.Material.Filled.RemoveRedEye" OnClick="AddToApplyJob"></MudIconButton>
+                        @if (@JobAppliedDTO.obj_applicationQuestionnaire != null)
+                        {
+                            @if (@JobAppliedDTO.obj_applicationQuestionnaire.Status == 5 && @JobAppliedDTO.obj_applicationQuestionnaire.ApplicationQuestionnaireLine.Count() > 0)
+                            {
+                                <MudIconButton Class="mt-3 colorblue" Style="color: #a1263e !important;" Title="Questionnaries" Icon="@Icons.Filled.QuestionAnswer" OnClick="QuestionaryForJob"></MudIconButton>
+                            }
+                            else @if (@JobAppliedDTO.obj_applicationQuestionnaire.Status == 2)
+                            {
+                            <MudIconButton Class="mt-3" Disabled="true" Style="color: #333333 !important;" Color="Color.Dark" Title="Compited Questionnaries" Icon="@Icons.Filled.QuestionAnswer" ></MudIconButton>
+                            }
+                        }
+                        <MudIconButton Class="mt-3 colorblue" Style="color: #a1263e !important;" Title="Communication" Icon="@Icons.Material.Filled.Chat" OnClick="ChatForHob"></MudIconButton>
+
+                        @if (@JobAppliedDTO.CheckListPendingCount > 0)
+                        {
+                           <MudIconButton Class="mt-3 colorblue" Style="color: #a1263e !important;" Title="Checklist" Icon="@Icons.Filled.ArtTrack" OnClick="ChecklistForHob"></MudIconButton>
+                        }
+
+                    </MudButtonGroup>
+                     @*<MudButton Class="mt-3 colorblue" Elevation="4" Size="Size.Small" StartIcon="@Icons.Material.Outlined.RemoveRedEye" Style="text-transform:none" > </MudButton> 
+                     <MudButton Class="mt-3 colorblue" Elevation="4" Size="Size.Small" StartIcon="@Icons.Material.Outlined.Chat" Style="text-transform:none" OnClick="ChatForHob"> </MudButton> *@
+                 </CardHeaderActions>
+            </MudCardHeader>
+             <MudDivider></MudDivider>
+            <MudCardContent>
+                <div class="mb-2" style="height:80px !important">
+                    <MudIcon Icon="@Icons.Material.Outlined.AddLocation" Title="Location" Class="d-inline" Color="Color.Dark" />
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2"> @JobAppliedDTO.Description  </MudText>
+                </div>
+            </MudCardContent>
+            <MudDivider></MudDivider>
+            <MudCardActions Class="d-flex justify-space-between">
+                <div class="mr-2 floatright">
+                    <MudIcon Icon="@Icons.Outlined.WatchLater" Title="Applied Date" Class="d-inline" Color="Color.Dark" />
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2">
+                        <b>@langaugecontainer.Keys["Applied"] : </b>
+                        @if(@JobAppliedDTO.AppliedDate != null)
+                        {
+                            @JobAppliedDTO.AppliedDate.Value.ToShortDateString();
+                        }
+                    </MudText>
+                </div>
+                <div class="ml-2">
+                    <MudIcon Icon="@Icons.Outlined.HourglassTop" Title="Application Status" Class="d-inline" Color="Color.Dark" />
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2">
+                        <b>@langaugecontainer.Keys["Status"] : </b>
+                        @if (@JobAppliedDTO.ApplicationStatus == 0)
+                        {
+                            <span> @langaugecontainer.Keys["Received"] </span>
+                        }
+                        else @if (@JobAppliedDTO.ApplicationStatus == 1)
+                        {
+                            <span> @langaugecontainer.Keys["Confirmed"] </span>
+                        }
+                        else @if (@JobAppliedDTO.ApplicationStatus == 2)
+                        {
+                            <span> @langaugecontainer.Keys["Interview"] </span>
+                        }
+                        else @if (@JobAppliedDTO.ApplicationStatus == 3)
+                        {
+                            <span> @langaugecontainer.Keys["Rejection"] </span>
+                        }
+                        else @if (@JobAppliedDTO.ApplicationStatus == 4)
+                        {
+                            <span> @langaugecontainer.Keys["Withdraw"] </span>
+                        }
+                        else 
+                        {
+                            <span> @langaugecontainer.Keys["Employed"] </span>
+                        }
+                        
+                    </MudText>
+                </div>
+                <div>
+                    @*<MudButton Variant="Variant.Outlined" Color="Color.Dark" Size="Size.Small" StartIcon="@Icons.Material.Outlined.RemoveRedEye" Style="text-transform:none" OnClick="AddToApplyJob">@langaugecontainer.Keys["View Posting"] </MudButton>*@
+                </div>
+                @*  <div>
+                    <MudButton Variant="Variant.Outlined" Color="Color.Dark" Size="Size.Small" StartIcon="@Icons.Material.Outlined.RemoveRedEye" Style="text-transform:none">View Posting</MudButton>
+                    </div>*@
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+}
+else
+{
+    <MudItem xs="12" sm="12" md="12">
+        <MudCard Elevation="4" Class="rounded-lg">
+            <MudCardHeader>
+              @*  <CardHeaderAvatar>
+                    <MudAvatar Image="icon-192.png" Size="Size.Medium" Elevation="4" Color="Color.Dark" />
+                </CardHeaderAvatar>*@
+                <CardHeaderContent>
+                    <MudText Class="colorblue"><b>@JobAppliedDTO.Code</b></MudText>
+                </CardHeaderContent>
+                  <CardHeaderActions>
+                       <MudButtonGroup Variant="Variant.Text">
+                        <MudIconButton Class="mt-3 colorblue" Style="color: #a1263e !important;" Title="View Job" Icon="@Icons.Material.Filled.RemoveRedEye" OnClick="AddToApplyJob"></MudIconButton>
+                        @if (@JobAppliedDTO.obj_applicationQuestionnaire != null)
+                        {
+                            @if (@JobAppliedDTO.obj_applicationQuestionnaire.Status == 5 && @JobAppliedDTO.obj_applicationQuestionnaire.ApplicationQuestionnaireLine.Count() > 0)
+                            {
+                                <MudIconButton Class="mt-3 colorblue" Style="color: #a1263e !important;" Title="Questionnaries" Icon="@Icons.Filled.QuestionAnswer" OnClick="QuestionaryForJob"></MudIconButton>
+                            }
+                            else @if (@JobAppliedDTO.obj_applicationQuestionnaire.Status == 2)
+                            {
+                            <MudIconButton Class="mt-3" Disabled="true" Style="color: #333333 !important;" Color="Color.Dark" Title="Compited Questionnaries" Icon="@Icons.Filled.QuestionAnswer" ></MudIconButton>
+                            }
+                        }
+                       <MudIconButton Class="mt-3 colorblue" Style="color: #a1263e !important;" Title="Communication" Icon="@Icons.Material.Filled.Chat" OnClick="ChatForHob"></MudIconButton>
+
+                        @if (@JobAppliedDTO.CheckListPendingCount != null && @JobAppliedDTO.CheckListPendingCount != 0)
+                        {
+                           <MudIconButton Class="mt-3 colorblue" Style="color: #a1263e !important;" Title="Checklist" Icon="@Icons.Filled.ArtTrack" OnClick="ChecklistForHob"></MudIconButton>
+                        }
+                        else
+                        {
+                            <MudIconButton Class="mt-3 colorblue" Disabled="true" Style="color: #a1263e !important;" Title="Checklist" Icon="@Icons.Filled.ArtTrack" OnClick="ChecklistForHob"></MudIconButton>
+                        }
+                    </MudButtonGroup>
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudDivider></MudDivider>
+            <MudCardContent>
+                <div class="mb-2">
+                    <MudIcon Icon="@Icons.Material.Outlined.AddLocation" Title="Location" Class="d-inline" Color="Color.Dark" />
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2"> @JobAppliedDTO.Description</MudText>
+                    <span class="mx-2">|</span>
+                    <MudIcon Icon="@Icons.Outlined.WatchLater" Title="Applied Date" Class="d-inline" Color="Color.Dark" />
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2">
+                        <b>@langaugecontainer.Keys["Applied"] : </b>
+                        @JobAppliedDTO.AppliedDate.Value.ToShortDateString();
+
+                    </MudText>
+                    <span class="mx-2">|</span>
+                    <MudIcon Icon="@Icons.Outlined.HourglassTop" Title="Application Status" Class="d-inline" Color="Color.Dark" />
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2">
+                        
+                       <b>@langaugecontainer.Keys["Status"] : </b>
+                         @if (@JobAppliedDTO.ApplicationStatus == 0)
+                        {
+                            <span> @langaugecontainer.Keys["Received"] </span>
+                        }
+                        else @if (@JobAppliedDTO.ApplicationStatus == 1)
+                        {
+                            <span> @langaugecontainer.Keys["Confirmed"] </span>
+                        }
+                        else @if (@JobAppliedDTO.ApplicationStatus == 2)
+                        {
+                            <span> @langaugecontainer.Keys["Interview"] </span>
+                        }
+                        else @if (@JobAppliedDTO.ApplicationStatus == 3)
+                        {
+                            <span> @langaugecontainer.Keys["Rejection"] </span>
+                        }
+                        else @if (@JobAppliedDTO.ApplicationStatus == 4)
+                        {
+                            <span> @langaugecontainer.Keys["Withdraw"] </span>
+                        }
+                        else 
+                        {
+                            <span> @langaugecontainer.Keys["Employed"] </span>
+                        }
+                    </MudText>
+                    @*<MudButton Variant="Variant.Outlined" Color="Color.Dark" Size="Size.Small" StartIcon="@Icons.Material.Outlined.RemoveRedEye" Style="text-transform:none" OnClick="AddToApplyJob">@langaugecontainer.Keys["View Posting"] </MudButton>*@
+
+                </div>
+            </MudCardContent>
+            <MudDivider></MudDivider>
+        </MudCard>
+    </MudItem>
+}
+@*else
+{
+    <MudItem xs="12" sm="6" md="4">
+        <MudCard Elevation="4" Class="rounded-lg">
+            <MudCardHeader>
+                <CardHeaderAvatar>
+                    <MudAvatar Image="icon-192.png" Size="Size.Medium" Elevation="4" Color="Color.Dark" />
+                </CardHeaderAvatar>
+                <CardHeaderContent>
+                    <MudText Class="colorblue"><b> @JobAppliedDTO.Code </b></MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudDivider></MudDivider>
+            <MudCardContent>
+                <div class="mb-2">
+                    <MudIcon Icon="@Icons.Material.Outlined.AddLocation" Title="Location" Class="d-inline" Color="Color.Dark" />
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2"> @JobAppliedDTO.Description </MudText>
+                </div>
+                <div class="mb-2">
+                    <MudIcon Icon="@Icons.Outlined.WatchLater" Title="Applied Date" Class="d-inline" Color="Color.Dark" />
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2">
+                        <b>Applied : </b>
+                        @JobAppliedDTO.AppliedDate
+                    </MudText>
+                </div>
+                <div class="mb-2">
+                    <MudIcon Icon="@Icons.Outlined.HourglassTop" Title="Application Status" Class="d-inline" Color="Color.Dark" />
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2">
+                        <b>Status : </b>
+                        @if (@JobAppliedDTO.ApplicationStatus == 1)
+                        {
+                            <span> Open </span>
+                        }
+                        else @if (@JobAppliedDTO.ApplicationStatus == 2)
+                        {
+                            <span> Closed </span>
+                        }
+                        else
+                        {
+                            <span> Applied </span>
+                        }
+                    </MudText>
+                </div>
+            </MudCardContent>
+            <MudDivider></MudDivider>
+            <MudCardActions Class="d-flex justify-end">
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+}*@
+
+
+<style>
+    .mud-avatar.mud-avatar-medium {
+        margin: 0px !important;
+    }
+
+    .mud-card-content {
+        padding: 8px 16px !important;
+    }
+
+    .mud-card-header {
+        padding: 10px 10px 1px 8px !important;
+    }
+
+    .mud-button-group-text.mud-button-group-override-styles.mud-button-group-horizontal:not(.mud-button-group-rtl) .mud-button-root:not(:first-child), .mud-button-group-text.mud-button-group-override-styles.mud-button-group-horizontal:not(.mud-button-group-rtl)>:not(:first-child) .mud-button-root{
+    border-left:0px solidvar(--mud-palette-text-primary)
+    }
+</style>

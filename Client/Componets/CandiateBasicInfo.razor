@@ -1,0 +1,319 @@
+﻿@page "/candidatebasicprofile"
+@layout MainLayout
+@inject Microsoft.Extensions.Configuration.IConfiguration configuration
+@*@inject Blazored.LocalStorage.ILocalStorageService localStore*@
+@using System.Globalization
+@using CandidatePortal.Client.Componets
+
+
+
+<MudBreadcrumbs Items="_items">
+    <ItemTemplate Context="item">
+        @if (@item.Text.ToLower() == "home")
+        {
+            <MudLink Href="@item.Href" Class="colorblue"><MudIcon Class="ma-4 colorblue" Icon="@Icons.Material.Filled.Home" /> @langaugecontainer.Keys["Home"]</MudLink>
+        }
+        else if (@item.Text.ToLower() == "candidate profile")
+        {
+            <MudLink Href="@item.Href" Disabled="true"> <MudIcon Class="ma-4" Icon="@Icons.Filled.AccountBox" /> @langaugecontainer.Keys["Candidate Profile"]</MudLink>
+        }
+    </ItemTemplate>
+</MudBreadcrumbs>
+
+
+<EditForm Model="@obj_CandidateModel" enctype="multipart/form-data" OnValidSubmit="AddCandidateAsync">
+    @if (IsLoding)
+    {
+        <AsyncLoader />
+    }
+    <MudCard Elevation="4" Class="rounded-lg padd-10 ">
+        <MudCardContent Class="pt-0">
+            <DataAnnotationsValidator />
+            <MudGrid>
+                <MudItem xs="12" sm="6" md="4" lg="4">
+                    <MudSelect @bind-Value="obj_CandidateModel.PersonalTitleERPRecId" Label="@langaugecontainer.Keys["Personal Title"]" Variant="Variant.Outlined" Margin="Margin.Dense">
+                        @foreach (var selectItem in obj_PersonalTitleDTO)
+                        {
+                            <MudSelectItem Value="@selectItem.ERPRecId"> @selectItem.Code </MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="4" lg="4">
+                    <MudTextField Label="@langaugecontainer.Keys["First Name"]" @bind-Value="obj_CandidateModel.FirstName" MaxLength="50" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Person" Variant="Variant.Outlined" Margin="Margin.Dense" For="@(() => obj_CandidateModel.FirstName)" />
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="4" lg="4">
+                    <MudTextField Label="@langaugecontainer.Keys["Middle Name"]" @bind-Value="obj_CandidateModel.MiddleName" MaxLength="50" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Person" Variant="Variant.Outlined" Margin="Margin.Dense" For="@(() => obj_CandidateModel.MiddleName)" />
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="4" lg="4">
+                    <MudTextField Label="@langaugecontainer.Keys["Last Name"]" @bind-Value="obj_CandidateModel.LastName" MaxLength="50" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Person" Variant="Variant.Outlined" Margin="Margin.Dense" For="@(() => obj_CandidateModel.LastName)" />
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="4" lg="4">
+                    <MudTextField Label="@langaugecontainer.Keys["Current Job Title"]" @bind-Value="obj_CandidateModel.CurrentJobTitle" MaxLength="100" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Badge" Variant="Variant.Outlined" Margin="Margin.Dense" For="@(() => obj_CandidateModel.CurrentJobTitle)" />
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="4" lg="4">
+                    <MudSelect @bind-Value="obj_CandidateModel.HighestDegreeERPRecId" Label="@langaugecontainer.Keys["Highest Degree"]" Variant="Variant.Outlined" Margin="Margin.Dense" OffsetY="true">
+                        @foreach (var selectItem in obj_EducationLevelDTO)
+                        {
+                            <MudSelectItem Value="@selectItem.ERPRecId"> @selectItem.Code </MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="4" lg="4">
+                    <MudSwitch @bind-Checked="obj_CandidateModel.PreviousEmployee" Color="Color.Secondary"> @langaugecontainer.Keys["Previous QFCRA employee"] </MudSwitch>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="4" lg="4">
+                    @*SelectedValuesChanged="(values) => ChangeCountry(values)" *@
+
+                    @*
+                    <MudSelect T="string" Value="obj_CandidateModel.CountryCode" Label="Country"
+                    Variant="Variant.Outlined" Margin="Margin.Dense" OffsetY="true">
+                    @foreach (var selectItem in obj_CountryDTO)
+                    {
+                    <MudSelectItem Value="@selectItem.Code"> @selectItem.Code (@selectItem.Description) </MudSelectItem>
+                    }
+                    </MudSelect>*@
+                    <MudSelect @bind-Value="obj_CandidateModel.CountryCode" Label="Country"
+                               Variant="Variant.Outlined" Margin="Margin.Dense" OffsetY="true">
+                        @foreach (var selectItem in obj_CountryDTO)
+                        {
+                            <MudSelectItem Value="@selectItem.Code"> @selectItem.Code (@selectItem.Description) </MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="4" lg="4" Class="invisible d-none">
+                    <MudSelect T="string" Value="obj_CandidateModel.StateCode" Label="State"
+                               SelectedValuesChanged="(values) => ChangeState(values)" Variant="Variant.Outlined" Margin="Margin.Dense" OffsetY="true">
+                        @foreach (var selectItem in obj_State)
+                        {
+                            <MudSelectItem Value="@selectItem.Code"> @selectItem.Code </MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="4" lg="4" Class="invisible d-none">
+                    <MudSelect @bind-Value="obj_CandidateModel.CityCode" Label="City" Variant="Variant.Outlined" Margin="Margin.Dense" OffsetY="true">
+                        @foreach (var selectItem in obj_City)
+                        {
+                            <MudSelectItem Value="@selectItem.Code"> @selectItem.Code </MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="4" lg="4"  Class="invisible d-none">
+                    <MudTextField Label="@langaugecontainer.Keys["Zip Code"]" @bind-Value="obj_CandidateModel.ZipCode" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Code" MaxLength="100" Variant="Variant.Outlined" Margin="Margin.Dense" For="@(() => obj_CandidateModel.Street)" />
+                </MudItem>
+
+                 <MudItem xs="12" sm="6" md="4" lg="4">
+                    <MudSelect @bind-Value="obj_CandidateModel.Nationality" Label="@langaugecontainer.Keys["Nationality"]" Variant="Variant.Outlined" Margin="Margin.Dense" OffsetY="true">
+                        @foreach (var selectItem in obj_CountryDTO)
+                        {
+                            <MudSelectItem Value="@selectItem.Code"> @selectItem.Code </MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="4" lg="4" Class="invisible d-none">
+                    <MudTextField Label="@langaugecontainer.Keys["Street"]" @bind-Value="obj_CandidateModel.Street" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.LocationCity" MaxLength="100" Variant="Variant.Outlined" Margin="Margin.Dense" For="@(() => obj_CandidateModel.Street)" />
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="4" lg="4">
+                    <MudTextField Label="@langaugecontainer.Keys["Contact No"]" Mask="@(new PatternMask("(+000)0000000000"))" @bind-Value="obj_CandidateModel.ContactNo" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.PhoneInTalk" MaxLength="15" Margin="Margin.Dense" Variant="Variant.Outlined" For="@(() => obj_CandidateModel.ContactNo)" />
+                    @*Mask="@contactNoMask"*@
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="4" lg="4">
+                    <MudTextField Label="@langaugecontainer.Keys["Alternate Contact No"]" Mask="@(new PatternMask("(+000)0000000000"))" @bind-Value="obj_CandidateModel.AlternateContactNo" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.PhoneIphone" MaxLength="15" Variant="Variant.Outlined" Margin="Margin.Dense" For="@(() => obj_CandidateModel.AlternateContactNo)" />
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="4" lg="4">
+                    <MudDatePicker @bind-Date="@obj_CandidateModel.Dob" PickerVariant="PickerVariant.Dialog" Editable="true" Label="@langaugecontainer.Keys["Birth Date"]"
+                                   DateFormat="dd/MM/yyyy" MaxDate="@DateTime.Today" Variant="Variant.Outlined" Margin="Margin.Dense" Color="Color.Secondary" Rounded="true">
+                    </MudDatePicker>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="4" lg="4">
+                    <MudSelect T="Int16?" Label="@langaugecontainer.Keys["Gender"]" @bind-Value="obj_CandidateModel.Gender" Variant="Variant.Outlined" Margin="Margin.Dense">
+                        <MudSelectItem T="Int16?" Value="0"> @langaugecontainer.Keys["None"]</MudSelectItem>
+                        <MudSelectItem T="Int16?" Value="1">@langaugecontainer.Keys["Male"]</MudSelectItem>
+                        <MudSelectItem T="Int16?" Value="2">@langaugecontainer.Keys["Female"]</MudSelectItem>
+                        <MudSelectItem T="Int16?" Value="3">@langaugecontainer.Keys["Non-Specific"]</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="4" lg="4">
+                    <MudSelect T="Int16?" Label="Marital Status" @bind-Value="obj_CandidateModel.MaritalStatus" Variant="Variant.Outlined" Margin="Margin.Dense">
+                        <MudSelectItem T="Int16?" Value="0">@langaugecontainer.Keys["None"]</MudSelectItem>
+                        <MudSelectItem T="Int16?" Value="1">@langaugecontainer.Keys["Married"]</MudSelectItem>
+                        <MudSelectItem T="Int16?" Value="2">@langaugecontainer.Keys["Single"]</MudSelectItem>
+                        <MudSelectItem T="Int16?" Value="3">@langaugecontainer.Keys["Widowed"]</MudSelectItem>
+                        <MudSelectItem T="Int16?" Value="4">@langaugecontainer.Keys["Divorced"]</MudSelectItem>
+                        <MudSelectItem T="Int16?" Value="5">@langaugecontainer.Keys["Cohabiting"]</MudSelectItem>
+                        <MudSelectItem T="Int16?" Value="6">@langaugecontainer.Keys["Registered Partnership"]</MudSelectItem>
+                        <MudSelectItem T="Int16?" Value="7">@langaugecontainer.Keys["Separated"]</MudSelectItem>
+                        <MudSelectItem T="Int16?" Value="8">@langaugecontainer.Keys["Civil Partnership"]</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="3" lg="4" Class="invisible d-none">
+                    <MudTextField Label="@langaugecontainer.Keys["Facebook Link"]" MaxLength="256" @bind-Value="obj_CandidateModel.FaceBookLink" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Facebook" For="@(() => obj_CandidateModel.FaceBookLink)" Variant="Variant.Outlined" Margin="Margin.Dense" />
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="3" lg="4" Class="invisible d-none">
+                    <MudTextField Label="@langaugecontainer.Keys["Twitter Link"]" MaxLength="256" @bind-Value="obj_CandidateModel.TwitterLink" For="@(() => obj_CandidateModel.TwitterLink)" Adornment="Adornment.End" AdornmentIcon="@Icons.Custom.Brands.Twitter" Variant="Variant.Outlined" Margin="Margin.Dense" />
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="3" lg="4" Class="invisible d-none">
+                    <MudTextField Label="@langaugecontainer.Keys["LinkedIn Link"]" MaxLength="256" @bind-Value="obj_CandidateModel.LinkedinLink" For="@(() => obj_CandidateModel.LinkedinLink)" Adornment="Adornment.End" AdornmentIcon="@Icons.Custom.Brands.LinkedIn" Variant="Variant.Outlined" Margin="Margin.Dense" />
+                </MudItem>
+            </MudGrid>
+
+            <MudGrid>
+                <MudItem xs="12" md="4" lg="4">
+                    <MudCard>
+                        <MudCardHeader>
+                            <CardHeaderAvatar>
+                                <MudAvatar Class="colorBGblue">
+                                    <MudIcon Icon="@Icons.Filled.AccountCircle"></MudIcon>
+                                </MudAvatar>
+                            </CardHeaderAvatar>
+                            <CardHeaderContent>
+                                <MudGrid>
+                                    <MudItem xs="12" md="12" lg="12" Class="pt-0">
+                                        <InputFile id="ImageURL" OnChange="UploadImage" hidden multiple accept=".jpg, .jpeg, .png" />
+                                        <MudButton HtmlTag="label" Variant="Variant.Filled"
+                                                   StartIcon="@Icons.Filled.CloudUpload"
+                                                   Class="my-3 colordfault" for="ImageURL">
+                                            Upload Photo
+                                        </MudButton>
+
+                                        @if (IsLodingImg == true)
+                                        {
+                                            <AsyncMiniLoader />
+                                        }
+
+                                        <ValidationMessage For="@(() => obj_CandidateModel.ImageURL)" />
+                                    </MudItem>
+
+                                    @if (@obj_CandidateModel.ImageURL != null && @obj_CandidateModel.ImageURL != "")
+                                    {
+                                        <MudItem xs="12" md="8" lg="8" Class="pt-0">
+                                            <MudCard Class="card">
+                                                <MudCardHeader Style="padding: 5px; text-align:right;">
+                                                    <CardHeaderContent>
+                                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Style="color:#FFF !important" @onclick="DeleteImage" />
+                                                    </CardHeaderContent>
+                                                </MudCardHeader>
+                                                <MudCardContent Style="padding: 5px; text-align:center; margin-left:16px;">
+                                                    <MudCardMedia class="rounded-circle" Image="@obj_CandidateModel.ImageURL" Style="height:100px; width:100px" />
+                                                </MudCardContent>
+                                            </MudCard>
+                                        </MudItem>
+                                    }
+                                </MudGrid>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent Style="padding: 5px;">
+
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+
+                <MudItem xs="12" md="8" lg="8">
+                    <MudCard>
+                        <MudCardHeader>
+                            <CardHeaderAvatar>
+                                <MudAvatar Class="colorBGblue">
+                                    <MudIcon Icon="@Icons.Filled.FilePresent"></MudIcon>
+                                </MudAvatar>
+                            </CardHeaderAvatar>
+                            <CardHeaderContent>
+                                <MudGrid>
+                                    <MudItem xs="12" md="12" lg="12" Class="pt-0">
+                                        @if (IsLodingResume)
+                                        {
+                                            <AsyncMiniLoader />
+                                        }
+                                        <InputFile id="ResumeURL" OnChange="UploadResume" hidden accept=".pdf" />
+                                        <MudButton HtmlTag="label" Variant="Variant.Filled"
+                                                   StartIcon="@Icons.Filled.CloudUpload"
+                                                   Class="my-3 colordfault" for="ResumeURL">
+                                            Resume & Cover Letter (Upload single PDF file)
+                                        </MudButton>
+                                        <ValidationMessage For="@(() => obj_CandidateModel.ResumeURL)" />
+                                    </MudItem>
+                                    @if (@obj_CandidateModel.ResumeURL != null && @obj_CandidateModel.ResumeURL != "")
+                                    {
+                                        <MudItem xs="12" md="4" lg="3" Class="pt-0">
+                                            <MudCard Class="card mt-2">
+                                                <MudCardHeader Style="padding: 5px; text-align:right; ">
+                                                    <CardHeaderContent>
+                                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Style="color:#FFF !important" @onclick="DeleteResume" />
+                                                    </CardHeaderContent>
+                                                </MudCardHeader>
+                                                <MudCardContent Style="padding: 5px; text-align:center; margin-left:16px;">
+                                                    @if (@obj_CandidateModel.ResumeURL != "")
+                                                    {
+                                                        @if (@FileExtension == ".pdf")
+                                                        {
+                                                            <MudCardMedia Image="./Images/pdf.png" class="rounded-circle" Style="height:100px; width:100px" />
+                                                        }
+                                                        else @if (@FileExtension == ".doc" || @FileExtension == ".docx")
+                                                        {
+                                                            <MudCardMedia Image="./Images/word.png" class="rounded-circle" Style="height:100px; width:100px" />
+                                                        }
+                                                        else @if (@FileExtension == ".xls" || @FileExtension == ".xlsx")
+                                                        {
+                                                            <MudCardMedia Image="./Images/excel.png" class="rounded-circle" Style="height:100px; width:100px" />
+                                                        }
+                                                        else @if (@FileExtension == ".rar")
+                                                        {
+                                                            <MudCardMedia Image="./Images/rar.png" class="rounded-circle" Style="height:100px; width:100px" />
+                                                        }
+                                                        else @if (@FileExtension == ".zip")
+                                                        {
+                                                            <MudCardMedia Image="./Images/zip.png" class="rounded-circle" Style="height:100px; width:100px" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <MudCardMedia Image="./Images/pdf.png" class="rounded-circle" Style="height:100px; width:100px" />
+                                                        }
+                                                    }
+                                                </MudCardContent>
+                                            </MudCard>
+                                        </MudItem>
+                                    }
+                                </MudGrid>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent Style="padding: 5px;">
+
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            </MudGrid>
+
+            <MudGrid Class="invisible d-none">
+                <MudItem xs="12" sm="4" md="4" lg="4">
+                    <MudSwitch @bind-Checked="obj_CandidateModel.Disabled" Color="Color.Secondary">@langaugecontainer.Keys["Specially abled"]</MudSwitch>
+                </MudItem>
+                <MudItem xs="12" sm="4" md="4" lg="4">
+                    <MudSwitch @bind-Checked="obj_CandidateModel.CanTravel" Color="Color.Secondary">@langaugecontainer.Keys["Can Travel"]</MudSwitch>
+                </MudItem>
+                <MudItem xs="12" sm="4" md="4" lg="4">
+                    <MudSwitch @bind-Checked="obj_CandidateModel.CanRelocate" Color="Color.Secondary"> @langaugecontainer.Keys["Can Relocate"] </MudSwitch>
+                </MudItem>
+            </MudGrid>
+        </MudCardContent>
+        <MudCardActions Class="d-flex justify-end">
+            <div style="float: right; margin-bottom:30px !important">
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success"> @langaugecontainer.Keys["Save"] </MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="BackToProfile"> @langaugecontainer.Keys["Cancel"] </MudButton>
+            </div>
+        </MudCardActions>
+    </MudCard>
+</EditForm>

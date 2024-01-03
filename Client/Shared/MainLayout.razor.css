@@ -1,0 +1,214 @@
+
+.spinner-container {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    z-index: 999;
+    top: 50%;
+    left: 50%;
+}
+
+.form-control {
+    background-color: transparent !important;
+    padding: 14.0px 14px !important;
+    border: 1px solid #bdbdbd;
+}
+
+    .form-control:focus {
+        border-color: rgb(62,44,221) !important;
+        border: 2px solid rgb(62,44,221) !important;
+        box-shadow: none !important;
+    }
+
+.colorblue {
+    color: #A1263E !important;
+}
+
+.colorBGblue {
+    background-color: #A1263E !important;
+    color: #FFF !important;
+}
+
+.mud-switch-secondary.mud-checked {
+    color: #A1263E !important;
+}
+
+.mud-tab.mud-tab-active {
+    color: #A1263E !important;
+    font-weight: 700;
+}
+
+.colordfault {
+    color: #1f355e !important;
+}
+
+.mud-tabs.mud-tabs-rounded {
+    border-radius: var(--mud-default-borderradius);
+    box-shadow: 1px 1px 14px -2px rgb(0 0 0 / 10%);
+}
+
+.colorwhite {
+    color: #FFF !important
+}
+
+.mybuttonFixed {
+    position: fixed;
+    bottom: 20px;
+    right: 50px;
+}
+
+.mybuttonFixed2 {
+    position: fixed;
+    bottom: 20px;
+    right: 140px;
+}
+
+.mud-input-control > .mud-input-control-input-container > .mud-input-label-inputcontrol {
+    font-size: 0.8rem;
+}
+
+.mud-fab-success {
+    color: #FFF;
+    background-color: #a1263e !important;
+}
+
+    .mud-fab-success:hover {
+        color: #FFF;
+        background-color: #d33a58 !important;
+    }
+
+.mud-button-filled.mud-button-filled-success {
+    color: #FFF;
+    background-color: #a1263e !important;
+}
+
+    .mud-button-filled.mud-button-filled-success:hover {
+        color: #FFF;
+        background-color: #d33a58 !important;
+    }
+
+.mud-chip-filled.mud-chip-color-secondary {
+    color: #FFF !important;
+    background-color: #a1263e !important;
+}
+
+.mud-tab-slider {
+    position: absolute;
+    background: #a1263e !important;
+}
+
+.headerback {
+    background: rgb(161,38,62) !important;
+    color: #FFF !important;
+}
+
+.page {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.mud-paper {
+    color: var(--mud-palette-text-primary);
+    background-color: var(--mud-palette-surface);
+    border-radius: var(--mud-default-borderradius);
+    transition: box-shadow 300ms cubic-bezier(.4,0,.2,1) 0ms;
+    border-radius: 25px !important;
+}
+
+.mud-card-content {
+    padding: 16px;
+    padding-top: 0px !important;
+}
+
+main {
+    flex: 1;
+}
+
+.sidebar {
+    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+}
+
+.top-row {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #d6d5d5;
+    justify-content: flex-end;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+}
+
+    .top-row ::deep a, .top-row ::deep .btn-link {
+        white-space: nowrap;
+        margin-left: 1.5rem;
+        text-decoration: none;
+    }
+
+        .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
+            text-decoration: underline;
+        }
+
+        .top-row ::deep a:first-child {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+@media (max-width: 640.98px) {
+    .top-row:not(.auth) {
+        display: none;
+    }
+
+    .top-row.auth {
+        justify-content: space-between;
+    }
+
+    .top-row ::deep a, .top-row ::deep .btn-link {
+        margin-left: 0;
+    }
+}
+
+@media (min-width: 641px) {
+    .page {
+        flex-direction: row;
+    }
+
+    .sidebar {
+        width: 250px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+    }
+
+    .top-row {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+        .top-row.auth ::deep a:first-child {
+            flex: 1;
+            text-align: right;
+            width: 0;
+        }
+
+    .top-row, article {
+        padding-left: 2rem !important;
+        padding-right: 1.5rem !important;
+    }
+}
+
+
+
+
+/*.mud-drawer-header {
+    display: flex;
+    padding: 12px 24px 12px 24px;
+    background: #40189d !important;
+}
+
+.mud-appbar .mud-toolbar-appbar {
+    height: var(--mud-appbar-height);
+    border-top-left-radius: 25px;
+    background: #f2f2f2 !important; 
+}*/
+

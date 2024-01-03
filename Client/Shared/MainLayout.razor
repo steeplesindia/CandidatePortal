@@ -1,0 +1,302 @@
+﻿@inherits LayoutComponentBase
+@using CandidatePortal.Client.Componets
+@using CandidatePortal.Shared.DTO
+@inject ILanguageContainerService langaugecontainer
+<link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+@*@inject NavigationManager Navigation*@
+
+@*<AsyncLoader />*@
+<MudRTLProvider RightToLeft="@_rightToLeft">
+    <CascadingValue Value="langaugecontainer">
+        <CascadingValue Value="SetTitleEvent">
+            <MudLayout>
+            <MudAppBar Elevation="1">
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+                <AuthorizeView>
+                    <Authorized>
+                        <MudTextField Class="rounded-xl mt-0 ml-9 d-none d-sm-block" DebounceInterval="500" MaxLength="10"
+                                      OnDebounceIntervalElapsed="HandleIntervalElapsed" @bind-Value="_SearchText" Label="@langaugecontainer.Keys["Search"]" Variant="Variant.Text"
+                                      Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Search" T="string" AdornmentColor="Color.Tertiary" Style="width:60% !important" OnAdornmentClick="@(() => SearchJob())" />
+                    </Authorized>
+                    <NotAuthorized>
+                        <MudTextField Class="rounded-xl mt-0 ml-9 d-none d-sm-block" Style="width:60% !important;visibility:hidden" T="string"></MudTextField>
+                    </NotAuthorized>
+                </AuthorizeView>
+                
+                @*<MudIconButton Icon="@Icons.Material.Filled.Search" Class="d-none d-sm-block" Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small" />*@
+
+                <MudSpacer />
+                <MudSpacer />
+                <MudSpacer />
+
+                @*<MudSwitch @bind-Checked="@_rightToLeft" Label="Toggle Right to Left" Color="Color.Primary" />*@
+                <AuthorizeView>
+                    <Authorized>
+                        <EditForm Model="@lanmodel" Context="editContext">
+                            <MudSelect Value="lanmodel.LanguageName" ValueChanged="@((string value) => OnValueChanged(value))"
+                                       Label="@langaugecontainer.Keys["Language"]"
+                                       Variant="Variant.Outlined">
+                                <MudSelectItem Value="@("en-US")">
+                                    <img src="../Images/united-states-of-america.svg"
+                                         height="16" class="mr-1" /> English
+                                </MudSelectItem>
+                                <MudSelectItem Value="@("ar-AE")">
+                                    <img src="../Images/united-arab-emirates.svg"
+                                         height="16" class="mr-1" /> أربيك
+                                </MudSelectItem>
+                            </MudSelect>
+                        </EditForm>
+                    </Authorized>
+                </AuthorizeView>
+                @if (_isLightMode)
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.Brightness4" OnClick="@ToggleTheme" />
+                }
+                else
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.Brightness5" OnClick="@ToggleTheme" />
+                }
+                @*  @if(_isAuthorized)
+                    {*@
+                <MudMenu>
+                    <ActivatorContent>
+                        @if (obj_CandidateModel.ImageURL != null && obj_CandidateModel.ImageURL != "")
+                        {
+                            <MudAvatar Image="@obj_CandidateModel.ImageURL" />
+                        }
+                        else
+                        {
+                            <MudAvatar Image="../Images/pngs/candidate.png" />
+                        }
+                    </ActivatorContent>
+                    <ChildContent>
+                        
+                        <AuthorizeView>
+                            <Authorized>
+                        <MudMenuItem OnClick="@ProfileView"> @langaugecontainer.Keys["Profile"] </MudMenuItem>
+                                <MudMenuItem OnClick="@signOut"> @langaugecontainer.Keys["Sign Out"] </MudMenuItem>
+                            </Authorized>
+                        <NotAuthorized>
+                            
+                        </NotAuthorized>
+                    </AuthorizeView>
+                        
+                    </ChildContent>
+                </MudMenu>
+                @* }*@
+                <MudText Typo="Typo.body1" Class="colorblue d-inline-flex">
+                    <b>  <LoginDisplay /></b>
+                    @*@langaugecontainer.Keys["SUserName"] *@
+                </MudText>
+            </MudAppBar>
+
+            <MudDrawer @bind-Open="@open" ClipMode="clipMode" Breakpoint="@breakpoint" PreserveOpenState="@preserveOpenState" Elevation="1" Variant="@DrawerVariant.Mini">
+                <MudDrawerHeader>
+                    @if (open)
+                    {
+                        <MudImage Src="../Images/pngs/Landscape_white.png" Alt="@obj_CandidateModel.FirstName" Elevation="25"
+                              Class="rounded-lg" Style="height:100% !important; width:width: 95% !important;" />
+                    }
+                    else
+                    {
+                        <MudImage Src="../Images/pngs/mini-logo.png" Alt="@obj_CandidateModel.FirstName" Elevation="25"
+                              Class="rounded-lg" Style="height:80% !important; width:width: 95% !important;" />
+                    }
+                </MudDrawerHeader>
+                <MudNavMenu>
+                    @* < <MudNavLink Match="NavLinkMatch.All" Href="" Icon="@Icons.Filled.SpaceDashboard" title="Dashboard">
+                        @langaugecontainer.Keys["Dashboard"]
+
+                        </MudNavLink>
+                        MudNavLink Match="NavLinkMatch.All" Href="/fetchdata" Icon="@Icons.Filled.AccountBox" title="Candidate Profile">
+                        Fetch Data
+                        </MudNavLink>
+                        <MudNavLink Match="NavLinkMatch.All" Href="/candidateprofile" Icon="@Icons.Filled.AccountBox" title="Candidate">
+                        @langaugecontainer.Keys["Candidate"]
+                        </MudNavLink>*@
+
+                    @*  @if(obj_CandidateModel.ImageURL != null && obj_CandidateModel.ImageURL != "")
+                        {
+
+                        <MudAvatar Image="@obj_CandidateModel.ImageURL" Elevation="25" />
+                        }
+                        else
+                        {
+                        <MudAvatar Image="../Images/pngs/17.jpg" Elevation="25" />
+                        }
+
+                        @if(obj_CandidateModel.FirstName != null && obj_CandidateModel.FirstName != "")
+                        {
+                        <MudText Typo="Typo.body2"> @obj_CandidateModel.FirstName @obj_CandidateModel.LastName  </MudText>
+                        }*@
+
+                    <AuthorizeView>
+                        <Authorized>
+                            <MudNavLink Match="NavLinkMatch.All" Href="/candidateprofileview" Icon="@Icons.Filled.AccountBox" title="Candidate Profile">
+                                @langaugecontainer.Keys["Candidate Profile"]
+                            </MudNavLink>
+                        @*</Authorized>
+                        <NotAuthorized>*@
+                            <MudNavLink Match="NavLinkMatch.All" Href="/joblisting" Icon="@Icons.Filled.ManageSearch" title="Job Listing">
+                                @langaugecontainer.Keys["JobListing"]
+                            </MudNavLink>
+                        @*</NotAuthorized>
+                        <Authorized>
+*@                            <MudNavLink Match="NavLinkMatch.All" Href="/appliedjob" Icon="@Icons.Filled.CreditScore" title="Applications">
+                                @langaugecontainer.Keys["Applications"]
+                            </MudNavLink>
+                        </Authorized>
+                        <NotAuthorized>
+                            @*@Navigation.NavigateTo($"authentication/login?returnUrl={Uri.EscapeDataString(Navigation.Uri)}")*@
+                        </NotAuthorized>
+                    </AuthorizeView>
+
+                    @*<MudNavLink Match="NavLinkMatch.All" Href="/reports" Icon="@Icons.Outlined.FormatListBulleted" title="Reports">
+                        @langaugecontainer.Keys["Reports"]
+                        </MudNavLink>
+                        <MudNavLink Match="NavLinkMatch.All" Href="/userlogin" Icon="@Icons.Outlined.FormatListBulleted" title="Reports">
+                        Login
+                        </MudNavLink>*@
+                </MudNavMenu>
+            </MudDrawer>
+            <MudMainContent Class="pt-1 px-1">
+                <MudContainer Class="mt-6">
+                    @* <CascadingValue Value="btn_clicked">*@
+                        @Body
+                    @*</CascadingValue>*@
+
+                </MudContainer>
+                <div class="footer">
+                    <p class="footer-text-left">
+                        Site developed by Steeples India Pvt. Ltd
+                    </p>
+                </div>
+            </MudMainContent>
+        </MudLayout>
+        </CascadingValue>
+    </CascadingValue>
+</MudRTLProvider>
+
+<MudThemeProvider Theme="_currentTheme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+
+@if (_isLightMode)
+{
+    <link href="./css/lightlayout.css" rel="stylesheet">
+    if (@_rightToLeft)
+    {
+        <style>
+            .mud-appbar .mud-toolbar-appbar {
+                height: 89px;
+                border-top-right-radius: 40px;
+                background: #FFF !important;
+                box-shadow: 1px 1px 14px -2px rgb(0 0 0 / 20%);
+            }
+        </style>
+    }
+    else
+    {
+        <style>
+            .mud-appbar .mud-toolbar-appbar {
+                height: 89px;
+                border-top-left-radius: 40px;
+                background: #FFF !important;
+                box-shadow: 1px 1px 14px -2px rgb(0 0 0 / 20%);
+            }
+        </style>
+    }
+}
+else
+{
+    <link href="./css/darklayout.css" rel="stylesheet">
+    if (@_rightToLeft)
+    {
+        <style>
+            .mud-appbar .mud-toolbar-appbar {
+                height: 89px;
+                border-top-right-radius: 40px;
+                background: #251e35 !important;
+                box-shadow: 1px 1px 14px -2px rgb(0 0 0 / 20%);
+            }
+        </style>
+    }
+    else
+    {
+        <style>
+            .mud-appbar .mud-toolbar-appbar {
+                height: 89px;
+                border-top-left-radius: 40px;
+                background: #251e35 !important;
+                box-shadow: 1px 1px 14px -2px rgb(0 0 0 / 20%);
+            }
+        </style>
+    }
+}
+
+<style>
+   .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 30px;
+        padding: 5px;
+        background-color: #a1263e;
+        border-top-right-radius: 20px;
+        margin-top: 20px !important;
+        z-index: 11111111111 !important;
+    }
+
+    .footer-text-left {
+        font-size: 15px;
+        padding-left: 40px;
+        /*float: right;*/
+        margin-right: 10px;
+        color: #FFF;
+        text-align:center;
+    }
+
+    .mud-container {
+        margin-top: 90px !important;
+        margin-bottom: 80px;
+    }
+
+    .mud-secondary-text 
+    {
+        color: #ff889f !important;
+    }
+    .mud-icon-button-color-secondary .mud-icon-button-label {
+    color: #ff889f !important;
+    }
+    
+    .mud-list {
+        z-index: 1111111111 !important;
+    }
+    .mud-popover.mud-popover-open {
+        z-index: 11111111111 !important;
+    }
+    .mud-icon-button-label {
+    color: #a1263e !important;
+}
+
+.mud-snackbar-location-top-right {
+    top: 24px;
+    right: 24px;
+    z-index: 1111111 !important;
+}
+
+.mud-info-text 
+{
+    color:  rgb(62, 73, 85) !important;
+}
+.mud-icon-button-color-info .mud-icon-button-label {
+    color: rgb(62, 73, 85) !important;
+}
+
+</style>
+<link href="./css/common.css" rel="stylesheet">
+
+
+

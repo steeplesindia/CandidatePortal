@@ -1,0 +1,90 @@
+﻿@page "/appliedjob"
+@using CandidatePortal.Client.Componets
+@using CandidatePortal.Client.Model
+
+<MudBreadcrumbs Items="@_items">
+    <ItemTemplate Context="item">  
+            @*<MudLink Href="@item.Href"> @langaugecontainer.Keys["Applied Job"]</MudLink>  *@
+        @if (@item.Text.ToLower() == "home")
+        {
+            <MudLink Href="@item.Href"  Class="colorblue"><MudIcon Class="ma-4" Icon="@Icons.Material.Filled.Home" /> @langaugecontainer.Keys["Home"]</MudLink>  
+        }
+        else if (@item.Text.ToLower() == "applied job")
+        {
+            <MudLink Href="@item.Href" Disabled="true"> <MudIcon Class="ma-4" Icon="@Icons.Material.Filled.AdsClick" C/> @langaugecontainer.Keys["Applied Job"]</MudLink>  
+        }
+    </ItemTemplate> 
+</MudBreadcrumbs>
+
+@if(IsLoding)
+{
+    <AsyncLoader />
+}
+
+<EditForm Model="@JobsearchDTO" enctype="multipart/form-data">
+    <MudGrid Class="d-flex pa-2">
+        <MudItem xs="12" sm="6" md="5" lg="5">
+            <MudText Typo="Typo.h5" Color="Color.Primary" Class="colorblue mb-2">
+                <b> @langaugecontainer.Keys["My Applications"]  </b>
+            </MudText>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="3" lg="3">
+            <MudSelect T="Int16" Value="JobsearchDTO.snStatus" ValueChanged="@((Int16 value) => ChangeAppliedJobStatusDetails(value))" Label="@langaugecontainer.Keys["Filter By Status"]" OpenIcon="@Icons.Outlined.ChangeCircle" Variant="Variant.Outlined" Dense="true">
+                <MudSelectItem T="Int16" Value="8">All</MudSelectItem>
+                <MudSelectItem T="Int16" Value="0">Received</MudSelectItem>
+                <MudSelectItem T="Int16" Value="2">Interview</MudSelectItem>
+                <MudSelectItem T="Int16" Value="3">Rejection</MudSelectItem>
+
+            </MudSelect>
+        </MudItem>
+
+        <MudItem xs="12" sm="5" md="3" lg="3">
+            <MudSelect T="Int16" Value="JobsearchDTO.snSortBy" ValueChanged="@((Int16 value) => ChangeAppliedJobSortByDetails(value))" Label="@langaugecontainer.Keys["Sort By"]" OpenIcon="@Icons.Outlined.Sort" Variant="Variant.Outlined" Dense="true">
+                <MudSelectItem T="Int16" Value="0"> Job Title </MudSelectItem>
+                <MudSelectItem T="Int16" Value="1"> Applied Date </MudSelectItem>
+                <MudSelectItem T="Int16" Value="2"> Status </MudSelectItem>
+            </MudSelect>
+        </MudItem>
+
+         <MudItem xs="12" sm="1" md="1" lg="1" Class="d-none d-sm-block">
+            <MudToggleIconButton Toggled="@AlarmOn" ToggledChanged="OnToggledChanged" Variant="Variant.Outlined" Style="padding-left:10px; padding-right:10px; color: #A1263E !important;" Class="mt-1 pt-4 pb-4 "
+                                 Icon="@Icons.Material.Filled.GridView" Title="Grid View"
+                                 ToggledIcon="@Icons.Material.Filled.Splitscreen" ToggledColor="@Color.Default" ToggledTitle="Full View" />
+        </MudItem>
+
+        @*<MudItem xs="12" sm="6" md="3" Class="ml-0">
+            <MudSelect T="Int16" Value="JobsearchDTO.snStatus" ValueChanged="@((Int16 value) => ChangeAppliedJobStatusDetails(value))" Label="Filter By Status" OpenIcon="@Icons.Outlined.ChangeCircle" Variant="Variant.Outlined" Dense="true">
+            @foreach (ApplicationStatus item in Enum.GetValues(typeof(ApplicationStatus)))
+            {
+            <MudSelectItem Value="@item" >@item</MudSelectItem>
+            }
+            </MudSelect>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="3">
+            <MudSelect T="Int16" Value="JobsearchDTO.snSortBy" ValueChanged="@((Int16 value) => ChangeAppliedJobSortByDetails(value))" Label="Sort By" OpenIcon="@Icons.Outlined.Sort" xs="12" sm="6" md="4" Variant="Variant.Outlined" Dense="true">
+            @foreach (SortBy item in Enum.GetValues(typeof(SortBy)))
+            {
+            <MudSelectItem Value="@item">@item</MudSelectItem>
+            }
+            </MudSelect>
+            </MudItem>*@
+    </MudGrid>
+</EditForm>
+<MudGrid Class="mt-2">
+    @foreach (var item in JobDetailsList)
+    {
+        <AppliedJobCard JobAppliedDTO="item" JobView="JobView" ApplyButton="0"></AppliedJobCard>
+    }
+</MudGrid>
+
+@*<MudDivider Class="my-3"></MudDivider>
+    <div class="d-flex flex-column align-center my-3">
+    <MudPagination Color="Color.Dark" Count="4" @bind-Selected="@_selected" Class=""/>
+    </div>*@
+
+<style>
+    :root {
+        --mud-typography-body2-size: 0.80rem !important;
+    }
+</style>

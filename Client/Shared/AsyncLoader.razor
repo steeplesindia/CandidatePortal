@@ -1,0 +1,61 @@
+﻿@*@inject SpinnerService SpinnerService
+*@
+
+ <style>
+    /*.spinner-container {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        z-index: 9999 !important;
+        top: 40%;
+        left: 40%;
+    }
+*/
+    /* (A) FULL SCREEN WRAPPER */
+    .spinner {
+      position: fixed;
+      top: 0; left: 0; 
+      width: 100vw; height: 100vh;
+      background: rgb(256, 256, 256);
+      transition: opacity 0.2s;
+      z-index: 99999999 !important;
+      display:block;
+    }
+ 
+    /* (B) CENTER LOADING SPINNER */
+    .spinner img {
+      position: absolute;
+      top: 35%; left: 50%;
+      transform: translate(-50%);
+    }
+</style>
+
+@if (isVisible)
+{
+    <div class="spinner">
+        <img src="Images/processing.gif" />
+    </div>
+}
+
+@code
+{
+    protected bool isVisible { get; set; } = true;
+
+    //protected override void OnInitialized()
+    //{
+    //    SpinnerService.OnShow += ShowSpinner;
+    //    SpinnerService.OnHide += HideSpinner;
+    //}
+
+    //public void ShowSpinner()
+    //{
+    //    isVisible = true;
+    //    StateHasChanged();
+    //}
+
+    //public void HideSpinner()
+    //{
+    //    isVisible = false;
+    //    StateHasChanged();
+    //}
+}

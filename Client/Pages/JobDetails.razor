@@ -1,0 +1,120 @@
+﻿@page "/JobDetail/{JobERPRecId:long}"
+@layout MainLayout
+
+<MudBreadcrumbs Items="@_items">
+    <ItemTemplate Context="item">  
+    @if (@item.Text.ToLower() == "home")
+    {
+        <MudLink Href="@item.Href" Class="colorblue"><MudIcon Class="ma-4" Icon="@Icons.Material.Filled.Home" /> @langaugecontainer.Keys["Home"]</MudLink>  
+    }
+    else if (@item.Text.ToLower() == "job listing")
+    {
+        <MudLink Href="@item.Href" Class="colorblue"> <MudIcon Class="ma-4" Icon="@Icons.Filled.AccountBox" /> @langaugecontainer.Keys["Job Listing"]</MudLink>  
+    }
+    else if (@item.Text.ToLower() == "job details")
+    {
+        <MudLink Href="@item.Href" Disabled="true"> <MudIcon Class="ma-4" Icon="@Icons.Filled.Description" /> @langaugecontainer.Keys["Job Details"]</MudLink>  
+    }
+    </ItemTemplate>  
+</MudBreadcrumbs>
+
+@if(IsLoding)
+{
+    <AsyncLoader />
+}
+
+<EditForm Model="@obj_JobDTO" enctype="multipart/form-data">
+    <MudCard Elevation="4" Class="rounded-lg padd-10 " Style="padding:10px !important">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.body1" Class="colorblue"> <MudIcon Icon="@Icons.Filled.Api"></MudIcon> <b> @obj_JobDTO.Code</b></MudText>
+            </CardHeaderContent>
+
+        </MudCardHeader>
+        <MudCardContent Class="pt-0">
+@*            <div class="mb-2">
+                <MudIcon Icon="@Icons.Filled.KeyboardDoubleArrowRight" Title="@langaugecontainer.Keys["Description"]" Class="d-inline colordfault" />
+                <MudText Class="d-inline pa-2 fw-bold" Typo="Typo.body1"> @obj_JobDTO.Description </MudText>
+            </div>
+*@
+            <div class="mb-2">
+                <MudIcon Icon="@Icons.Filled.Api" Title="Description" Class="d-inline" Color="Color.Dark" />
+                <MudText Class="d-inline pa-2" Typo="Typo.body2"> <b>@langaugecontainer.Keys["Description"] : </b> @obj_JobDTO.Description </MudText>
+            </div>
+
+            <div class="mb-2">
+                <MudIcon Icon="@Icons.Filled.LocationCity" Title="Start Date" Class="d-inline" Color="Color.Dark" />
+                <MudText Class="d-inline pa-2" Typo="Typo.body2">
+                    <b>@langaugecontainer.Keys["Locations"] : </b> @obj_JobDTO.Locations
+                </MudText>
+            </div>
+
+            <div class="mb-2">
+                <MudText Typo="Typo.body2">
+                    @if(obj_JobDTO.LongDescription != null && obj_JobDTO.LongDescription != "")
+                    {
+                        @((MarkupString)obj_JobDTO.LongDescription)
+                    }
+                </MudText>
+            </div>
+        </MudCardContent>
+        <MudDivider></MudDivider>
+        <MudCardActions Class="d-flex justify-end">
+            <MudGrid>
+                <MudItem md="12" xs="12">
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2" Style="margin-right:10px;">
+                        <b>@langaugecontainer.Keys["Status"] : </b>
+                        @if (@obj_JobDTO.Status == 0)
+                        {
+                            <span> @langaugecontainer.Keys["Planned"] </span>
+                        }
+                        else @if (@obj_JobDTO.Status == 1)
+                        {
+                            <span> @langaugecontainer.Keys["Started"] </span>
+                        }
+                        else @if (@obj_JobDTO.Status == 2)
+                        {
+                            <span> @langaugecontainer.Keys["Finished"] </span>
+                        }
+                        else @if (@obj_JobDTO.Status == 3)
+                        {
+                            <span> @langaugecontainer.Keys["Cancelled"] </span>
+                        }
+                    </MudText>
+
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2">
+                        <b> <MudIcon Icon="@Icons.Filled.Timer"></MudIcon> @langaugecontainer.Keys["Application Deadline"] &nbsp; </b>
+                        @if (@obj_JobDTO.ApplicationDeadline != null)
+                        {
+                            @obj_JobDTO.ApplicationDeadline.Value.ToShortDateString();
+                        }
+                    </MudText>
+                </MudItem>
+               @* <MudItem md="4" xs="6">
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2">
+                        <b> <MudIcon Icon="@Icons.Filled.DateRange"></MudIcon> @langaugecontainer.Keys["Start Date"] &nbsp; </b>
+                        @if (@obj_JobDTO.OpeningDate != null)
+                        {
+                            @obj_JobDTO.OpeningDate.Value.ToShortDateString()
+                            ;
+                        }
+                    </MudText>
+                </MudItem>
+                <MudItem md="4" xs="6" Class="floatright">
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2">
+                        <b> <MudIcon Icon="@Icons.Filled.DateRange"></MudIcon> @langaugecontainer.Keys["End Date"] &nbsp; </b>
+                        @if (@obj_JobDTO.ClosingDate != null)
+                        {
+                            @obj_JobDTO.ClosingDate.Value.ToShortDateString();
+                        }
+                    </MudText>
+                </MudItem>*@
+            </MudGrid>
+
+            @if (@JobApply != "Applied")
+            {
+                <MudButton Variant="Variant.Outlined" Class="colorBGblue" Size="Size.Small" StartIcon="@Icons.Filled.AdsClick" Style="text-transform:none" Disabled="@(JobApply == "Applied" ? true : false)" OnClick="AddToApplyJobApplication"> @JobApply </MudButton>
+            }
+        </MudCardActions>
+    </MudCard>
+</EditForm>

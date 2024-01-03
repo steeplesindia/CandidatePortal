@@ -1,0 +1,28 @@
+﻿<CascadingValue Value="this">
+    <div id="@Id">
+        <ul class="nav nav-pills nav-justified">
+            @foreach (var step in Steps)
+            {
+                <li id="step-@(StepsIndex(step) + 1)" class="nav-item">
+                    <a class="nav-link @((ActiveStep == step) ? "active" : "")" href="javascript: void(0)" 
+                       @onclick="@(e=> SetActive(step))">@step.Name</a>
+                </li>
+            }
+        </ul>
+        <div id="container-fluid">
+            @ChildContent
+        </div>
+    </div>
+    <div style="position: fixed; bottom: 30px; right: 35px; z-index: 99999;">
+        <MudIconButton Class="mt-3 colorblue" Style="color: #a1263e !important;" Variant="Variant.Outlined" Title="@langaugecontainer.Keys["Previous"]" ButtonType="ButtonType.Button" Icon="@Icons.Material.Filled.SkipPrevious" OnClick="GoBack" hidden="@(ActiveStepIx == 0)"></MudIconButton>&nbsp;
+        <MudIconButton Class="mt-3 colorblue" Style="color: #a1263e !important;" Variant="Variant.Outlined" Title="@langaugecontainer.Keys["Next"]" ButtonType="ButtonType.Button"  Icon="@Icons.Material.Filled.SkipNext" OnClick="GoNext" hidden="@(IsLastStep == true)"></MudIconButton>&nbsp;&nbsp;
+        <MudIconButton Class="mt-3 colorblue" Style="color: #a1263e !important;" Variant="Variant.Outlined" Title="@langaugecontainer.Keys["Submit"]" ButtonType="ButtonType.Submit" Icon="@Icons.Material.Filled.Save"></MudIconButton>&nbsp;
+        @* <MudButton Variant="Variant.Filled" Color="Color.Default" > Previous </MudButton>
+         <MudButton ButtonType="ButtonType.Button" OnClick="GoNext" Variant="Variant.Filled" Color="Color.Success">Next</MudButton>
+         <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success"> Submit </MudButton>*@
+     </div>
+   @* <button class="btn btn-primary btn-lg" type="button" 
+             @onclick="GoBack">Previous</button>
+    <button class="btn btn-primary btn-lg" 
+            type="@(IsLastStep ? "submit" : "button")" @onclick="GoNext">@(IsLastStep ? "Submit" : "Next")</button>*@
+</CascadingValue>

@@ -1,0 +1,402 @@
+﻿@page "/userlogin"
+@layout BlankLayout
+
+<div class="form-login-body">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 mx-auto login-desk">
+                <div class="row">
+                    <div class="col-md-7 col-lg-7 col-sm-6 col-xs-12 detail-box d-none d-sm-block">
+                        <img class="logo" src="../images/pngs/logo1.png" alt="">
+                        <div class="detailsh">
+                            <img class="help img-fluid" src="../images/pngs/NewProject.png" alt="">
+                            <p class="mt-5"> Don't have an account? <a href="" class="maroon"> Sign Up Now</a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-lg-5 col-sm-6 col-xs-12 padleftright paddleft0">
+                        <div class="loginform borreadiuse">
+                            <div class="login-det">
+                                <h4 class="text-white">Welcome To Steeples</h4>
+                                <p style="color: #ff91a5 !important; font-size: 15px;">Signin to your Account</p>
+                                 
+                                <div id="api"></div>
+
+                            </div>
+                           @* <div class="login-det1 mt-2">
+                                <ul>
+                                    <li><a href="#" class="ml-2"><MudIcon Icon="@Icons.Custom.Brands.Facebook" Title="Facebook" Class="text-white" /></a></li>
+                                    <li><a href="#" class="ml-2"><MudIcon Icon="@Icons.Custom.Brands.Twitter" Title="Twitter" Class="text-white" /></a></li>
+                                    <li><a href="#" class="ml-2"><MudIcon Icon="@Icons.Custom.Brands.Instagram" Title="Instagram" Class="text-white" /></a></li>
+                                    <li><a href="#" class="ml-2"><MudIcon Icon="@Icons.Custom.Brands.LinkedIn" Title="LinkedIn" Class="text-white" /></a></li>
+                                    <li><a href="#" class="ml-2"><MudIcon Icon="@Icons.Custom.Brands.Google" Title="Google" Class="text-white" /></a></li>
+                                </ul>
+                            </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style >
+body {
+    background-color: #f1f1f145 !important;
+    font-family: "Open Sans", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+}
+.maroon {
+   color: #A1263E;
+   font-weight:700 !important
+}
+.paddleft0
+{
+    padding-left:0px !important;
+}
+
+.form-login-body {
+    width: 100%;
+    height: calc(100vh);
+    background: rgb(94,1,169);
+    background: linear-gradient(18deg, rgba(94,1,169,1) 0%, rgba(124,74,200,1) 51%, rgba(107,142,215,1) 100%);
+    background-repeat: no-repeat;
+}
+
+    .form-login-body .login-desk {
+        filter: drop-shadow(0 0 13.5px rgba(0, 0, 0, 0.09));
+        /*margin-top: 5%;
+    margin-bottom: 5%;
+    margin-left: 18% !important;*/
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+.mud-input.mud-input-outlined .mud-input-outlined-border {
+    border-color: #7a52c9;
+    border-width: 0px !important;
+    border-style: solid;
+    transition: border-width,border-color 200ms cubic-bezier(.4,0,.2,1) 0ms;
+}
+
+.form-login-body .login-desk .detail-box {
+    background-color: #FFF;
+    padding: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+    .form-login-body .login-desk .detail-box .logo {
+        width: 130px;
+    }
+
+    .form-login-body .login-desk .detail-box .help {
+        width: 450px;
+        /*margin-top: 30px;
+    margin-bottom: 50px;*/
+    }
+
+    .form-login-body .login-desk .detail-box .detailsh {
+        text-align: center;
+    }
+
+        .form-login-body .login-desk .detail-box .detailsh h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .form-login-body .login-desk .detail-box .detailsh p {
+            font-size: .8rem;
+        }
+
+.form-login-body .login-desk .loginform {
+    background-color: #FFF;
+    text-align: center;
+    color: #4C56C0;
+    padding: 50px 50px 10px 50px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+    .form-login-body .login-desk .loginform a {
+        color: #4C56C0;
+    }
+
+    .form-login-body .login-desk .loginform h4 {
+        color: #4C56C0;
+        font-size: 1.3rem;
+    }
+
+    .form-login-body .login-desk .loginform p {
+        font-size: .8rem;
+        margin-bottom: 10px;
+    }
+
+.text-white {
+    color: white !important;
+}
+
+.login-det {
+    background: rgb(94,1,169);
+    background: linear-gradient(18deg, rgba(94,1,169,1) 0%, rgba(124,74,200,1) 51%, rgba(107,142,215,1) 100%);
+    border-radius: 20px;
+    padding: 25px;
+}
+
+.login-det1 {
+    background: rgb(94,1,169);
+    background: linear-gradient(18deg, rgba(94,1,169,1) 0%, rgba(124,74,200,1) 51%, rgba(107,142,215,1) 100%);
+    border-radius: 20px;
+    padding: 10px 25px;
+}
+
+ul > li {
+    display: inline-block;
+}
+
+
+.form-login-body .login-desk .detail-box {
+    background-color: #FFF;
+    padding: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+    .form-login-body .login-desk .detail-box .logo {
+        width: 130px;
+    }
+
+    .form-login-body .login-desk .detail-box .help {
+        width: 450px;
+        /*    margin-top: 30px;
+    margin-bottom: 50px;*/
+    }
+
+    .form-login-body .login-desk .detail-box .detailsh {
+        text-align: center;
+    }
+
+        .form-login-body .login-desk .detail-box .detailsh h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .form-login-body .login-desk .detail-box .detailsh p {
+            font-size: .8rem;
+        }
+
+.form-login-body .login-desk .loginform {
+    background-color: #FFF;
+    text-align: center;
+    color: #4C56C0;
+    padding: 50px 50px 10px 50px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+    .form-login-body .login-desk .loginform a {
+        color: #4C56C0;
+    }
+
+    .form-login-body .login-desk .loginform h4 {
+        color: #4C56C0;
+        font-size: 1.3rem;
+    }
+
+    .form-login-body .login-desk .loginform p {
+        font-size: .8rem;
+        margin-bottom: 10px;
+    }
+
+.form-login-body .login-desk .detail-box .detailsh h3 {
+    font-size: 1.2rem;
+    margin-bottom: 4px;
+    margin-top: 11px !important;
+}
+
+.mud-input {
+    background: #FFF !important;
+    border-radius: 20px !important;
+}
+
+.mud-icon-size-medium {
+    font-size: 1.5rem;
+    color: #FFF !important;
+}
+
+.mud-icon-root.mud-svg-icon {
+    fill: currentColor;
+    color: #FFF !important;
+}
+
+placeholder {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+.form-login-body .login-desk .loginform .login-det .form-row {
+    margin-top: 20px;
+}
+
+    .form-login-body .login-desk .loginform .login-det .form-row label {
+        font-size: .85rem;
+    }
+
+.form-login-body .login-desk .loginform .login-det .input-group .input-group-prepend .input-group-text {
+    background-color: #3d46a7;
+    color: #ffffffcf;
+    border-right: 0px;
+    border: 0px;
+}
+
+.form-login-body .login-desk .loginform .login-det .input-group .form-control {
+    background-color: #3d46a7;
+    color: #4C56C0;
+    border-left: 0px;
+    border: 0px;
+}
+
+    .form-login-body .login-desk .loginform .login-det .input-group .form-control:focus {
+        border: 0px;
+    }
+
+.form-login-body .login-desk .loginform .login-det .btn-danger {
+    width: 100%;
+    border-radius: 0px;
+    background-color: #fa607e;
+    border-radius: 50px;
+}
+
+.forget {
+    color: #FF9800 !important;
+    text-align: right;
+}
+
+.forgetq {
+    color: #FF9800 !important;
+}
+
+.form-login-body .login-desk .loginform .forget {
+    text-align: right;
+}
+
+.form-login-body .login-desk .loginform .social-link ul {
+    float: right;
+    margin-top: 30px;
+}
+
+    .form-login-body .login-desk .loginform .social-link ul li {
+        float: left;
+        padding: 15px;
+        font-size: .9rem;
+    }
+
+::-webkit-input-placeholder {
+    color: #FFF !important;
+}
+
+::-moz-placeholder {
+    color: #FFF !important;
+}
+
+:-ms-input-placeholder {
+    color: #FFF !important;
+}
+
+:-moz-placeholder {
+    color: #FFF !important;
+}
+
+.input-group {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-align: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+    width: 100%;
+}
+
+.input-group-prepend {
+    margin-right: -1px;
+}
+
+.input-group-append, .input-group-prepend {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.input-group-append, .input-group-prepend {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.form-login-body .login-desk .loginform .login-det .input-group .input-group-prepend .input-group-text {
+    background-color: #3d46a7;
+    color: #ffffffcf;
+    border-right: 0px;
+    border: 0px;
+}
+
+.form-login-body .login-desk .loginform .login-det .input-group .input-group-prepend .input-group-text {
+    background-color: #3d46a7;
+    color: #ffffffcf;
+    border-right: 0px;
+    border: 0px;
+}
+
+::placeholder {
+    color: transparent !important;
+    font-size: 13px;
+    opacity: .5 !important;
+}
+
+a:hover,
+a:focus,
+input,
+textarea {
+    text-decoration: none;
+    outline: none;
+}
+
+@@media screen and (max-width: 991px) {
+    .form-login-body {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}
+
+@@media screen and (max-width: 480px) {
+    .form-login-body {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .form-login-body .login-desk .loginform {
+        background-color: #FFF;
+        text-align: center;
+        color: #4C56C0;
+        padding: 50px 50px 10px 50px;
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+    .padleftright {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .borreadiuse {
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+    }
+}
+</style>

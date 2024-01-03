@@ -1,0 +1,599 @@
+﻿@layout MainLayout
+@page "/candidateprofile"
+@using System.ComponentModel.DataAnnotations
+@using CandidatePortal.Client.Componets
+@using CandidatePortal.Shared.DTO
+@inject IDialogService DialogService
+
+    <MudDialog @bind-IsVisible="visible" Options="dialogOptions">
+        <TitleContent>
+            <MudText Typo="Typo.body1">
+                <MudIcon Icon="@Icons.Material.Filled.AccountBox" Class="mr-3" /> Candidate Profile
+            </MudText>
+        </TitleContent>
+        <DialogContent>
+        <EditForm Model="@obj_CandidateModel" OnValidSubmit="AddCandidateAsync" enctype="multipart/form-data">
+        
+            @if(IsLoding)
+            {
+                <AsyncLoader />
+            }
+
+            <div style="max-height: calc(100vh - 150px); overflow-y: auto;">
+                <MudTabs Outlined="true" Rounded="true" Border="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+                    <MudTabPanel Text="Basic Information" Icon="@Icons.Material.Filled.CoPresent">
+                        <DataAnnotationsValidator />
+                        <MudGrid>
+                            <MudItem xs="12" sm="6" md="4" lg="3">
+                                <MudSelect @bind-Value="obj_CandidateModel.PersonalTitleERPRecId" Label="Personal Title" Variant="Variant.Outlined" Margin="Margin.Dense">
+                                    @foreach (var selectItem in obj_PersonalTitleDTO)
+                                    {
+                                        <MudSelectItem Value="@selectItem.ERPRecId"> @selectItem.Code </MudSelectItem>
+                                    }
+                                </MudSelect>
+                                 <ValidationMessage For="@(() => obj_CandidateModel.PersonalTitleERPRecId)" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="4" lg="3">
+                                <MudTextField Label="First Name *" @bind-Value="obj_CandidateModel.FirstName" For="@(() => obj_CandidateModel.FirstName)" MaxLength="50" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Face" AdornmentColor="Color.Secondary" Variant="Variant.Outlined" Margin="Margin.Dense"/>
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="4" lg="3">
+                                <MudTextField Label="Middle Name" @bind-Value="obj_CandidateModel.MiddleName" MaxLength="50" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Face" Variant="Variant.Outlined" Margin="Margin.Dense"/>
+                                <ValidationMessage For="@(() => obj_CandidateModel.MiddleName)" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="4" lg="3">
+                                <MudTextField Label="Last Name *" @bind-Value="obj_CandidateModel.LastName" For="@(() => obj_CandidateModel.LastName)" MaxLength="50" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Face" AdornmentColor="Color.Secondary" Variant="Variant.Outlined" Margin="Margin.Dense"/>
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="4" lg="3">
+                                <MudTextField Label="Current Job Title" @bind-Value="obj_CandidateModel.CurrentJobTitle" MaxLength="100" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Badge" Variant="Variant.Outlined" Margin="Margin.Dense"/>
+                                <ValidationMessage For="@(() => obj_CandidateModel.CurrentJobTitle)" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="4" lg="3">
+                                <MudSelect @bind-Value="obj_CandidateModel.HighestDegreeERPRecId" Label="Highest Degree" Variant="Variant.Outlined" Margin="Margin.Dense" OffsetY="true">
+                                    @foreach (var selectItem in obj_EducationLevelDTO)
+                                    {
+                                        <MudSelectItem Value="@selectItem.ERPRecId"> @selectItem.Code </MudSelectItem>
+                                    }
+                                </MudSelect>
+                                 <ValidationMessage For="@(() => obj_CandidateModel.HighestDegreeERPRecId)" />
+
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="4" lg="3">
+                                <MudSwitch @bind-Checked="obj_CandidateModel.PreviousEmployee" Color="Color.Secondary"> Previous QFCRA employee </MudSwitch>
+                            </MudItem>
+
+                            @*SelectedValuesChanged="(values) => ChangeCountry(values)"*@
+                            
+                            @*<MudItem xs="12" sm="6" md="4" lg="3">
+                                <MudSelect T="string" Value="obj_CandidateModel.CountryCode" Label="Country" 
+                                    Variant="Variant.Outlined" Margin="Margin.Dense" OffsetY="true">
+                                    @foreach (var selectItem in obj_CountryDTO)
+                                    {
+                                        <MudSelectItem Value="@selectItem.Code"> @selectItem.Code (@selectItem.Description) </MudSelectItem>
+                                    }
+                                  
+                                </MudSelect>
+                            </MudItem>*@
+
+                             <MudItem xs="12" sm="6" md="4" lg="3">
+                                <MudSelect @bind-Value="obj_CandidateModel.CountryCode" Label="Country" 
+                                Variant="Variant.Outlined" Margin="Margin.Dense" OffsetY="true">
+                                    @foreach (var selectItem in obj_CountryDTO)
+                                    {
+                                        <MudSelectItem Value="@selectItem.Code"> @selectItem.Code (@selectItem.Description) </MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="4" lg="3" Class="invisible d-none">
+                                <MudSelect T="string" Value="obj_CandidateModel.StateCode" Label="State"
+                                    SelectedValuesChanged="(values) => ChangeState(values)" Variant="Variant.Outlined" Margin="Margin.Dense" OffsetY="true">
+                                    @foreach (var selectItem in obj_State)
+                                    {
+                                        <MudSelectItem Value="@selectItem.Code"> @selectItem.Code </MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="4" lg="3" Class="invisible d-none">
+                                <MudSelect @bind-Value="obj_CandidateModel.CityCode" Label="City" Variant="Variant.Outlined" Margin="Margin.Dense" OffsetY="true">
+                                    @foreach (var selectItem in obj_City)
+                                    {
+                                        <MudSelectItem Value="@selectItem.Code"> @selectItem.Code </MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+
+                             <MudItem xs="12" sm="6" md="4" lg="3">
+                                <MudSelect @bind-Value="obj_CandidateModel.Nationality" Label="Nationality" Variant="Variant.Outlined" Margin="Margin.Dense" OffsetY="true">
+                                    @foreach (var selectItem in obj_CountryDTO)
+                                    {
+                                        <MudSelectItem Value="@selectItem.Code"> @selectItem.Code </MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+
+
+                            @*Akshay 09-06-2022*@
+                            <MudItem xs="12" sm="6" md="4" lg="3"  Class="invisible d-none">
+                                <MudTextField Label="Zip Code" @bind-Value="obj_CandidateModel.ZipCode" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Code" MaxLength="100" Variant="Variant.Outlined" Margin="Margin.Dense"/>
+                                <ValidationMessage For="@(() => obj_CandidateModel.ZipCode)" />
+                            </MudItem>
+
+                            @*<MudItem xs="12" sm="6" md="4" lg="3">
+                                <MudSelect @bind-Value="obj_CandidateModel.Nationality" Label="@langaugecontainer.Keys["Nationality"]" Variant="Variant.Outlined" Margin="Margin.Dense" OffsetY="true">
+                                    @foreach (var selectItem in obj_CountryDTO)
+                                    {
+                                        <MudSelectItem Value="@selectItem.Code"> @selectItem.Code (@selectItem.Description) </MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>*@
+
+                            <MudItem xs="12" sm="6" md="4" lg="3" Class="invisible d-none">
+                                <MudTextField Label="Street" @bind-Value="obj_CandidateModel.Street" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.LocationCity" MaxLength="100" Variant="Variant.Outlined" Margin="Margin.Dense"/>
+                                <ValidationMessage For="@(() => obj_CandidateModel.Street)" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="4" lg="3">
+                                <MudTextField Label="Contact No. *" Mask="@(new PatternMask("(+000)0000000000"))" @bind-Value="obj_CandidateModel.ContactNo" For="@(() => obj_CandidateModel.ContactNo)" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.PhoneInTalk" AdornmentColor="Color.Secondary" MaxLength="15" Margin="Margin.Dense" Variant="Variant.Outlined"/>
+                             </MudItem>
+
+                            <MudItem xs="12" sm="6" md="4" lg="3">
+                                <MudTextField Label="Alternate Contact No"  Mask="@(new PatternMask("(+000)0000000000"))" @bind-Value="obj_CandidateModel.AlternateContactNo" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.PhoneIphone" MaxLength="15" Variant="Variant.Outlined" Margin="Margin.Dense"/>
+                                 <ValidationMessage For="@(() => obj_CandidateModel.AlternateContactNo)" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="4" lg="3">
+                                <MudDatePicker @bind-Date="@obj_CandidateModel.Dob" PickerVariant="PickerVariant.Dialog" Editable="true" Label="Birth Date"
+                                               DateFormat="dd/MM/yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" Color="Color.Info" 
+                                               Rounded="true" MaxDate="@DateTime.Today">
+                                </MudDatePicker>
+                                
+                                @*<ValidationMessage For="@(() => obj_CandidateModel.Dob)" />*@
+                            </MudItem>
+                            <MudItem xs="12" sm="6" md="4" lg="3">
+                                <MudSelect T="Int16?" Label="Gender" @bind-Value="obj_CandidateModel.Gender" Variant="Variant.Outlined" Margin="Margin.Dense">
+                                    <MudSelectItem T="Int16?" Value="0">None</MudSelectItem>
+                                    <MudSelectItem T="Int16?" Value="1">Male</MudSelectItem>
+                                    <MudSelectItem T="Int16?" Value="2">Female</MudSelectItem>
+                                    <MudSelectItem T="Int16?" Value="3">Non-Specific</MudSelectItem>
+                                </MudSelect>
+                             <ValidationMessage For="@(() => obj_CandidateModel.Gender)" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="4" lg="3">
+                                <MudSelect T="Int16?" Label="Marital Status" @bind-Value="obj_CandidateModel.MaritalStatus" Variant="Variant.Outlined" Margin="Margin.Dense">
+                                    <MudSelectItem T="Int16?" Value="0">None</MudSelectItem>
+                                    <MudSelectItem T="Int16?" Value="1">Married</MudSelectItem>
+                                    <MudSelectItem T="Int16?" Value="2">Single</MudSelectItem>
+                                    <MudSelectItem T="Int16?" Value="3">Widowed</MudSelectItem>
+                                    <MudSelectItem T="Int16?" Value="4">Divorced</MudSelectItem>
+                                    <MudSelectItem T="Int16?" Value="5">Cohabiting</MudSelectItem>
+                                    <MudSelectItem T="Int16?" Value="6">Registered Partnership</MudSelectItem>
+                                    <MudSelectItem T="Int16?" Value="7">Separated</MudSelectItem>
+                                    <MudSelectItem T="Int16?" Value="8">Civil Partnership</MudSelectItem>
+                                </MudSelect>
+                                 <ValidationMessage For="@(() => obj_CandidateModel.MaritalStatus)" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="3" lg="3" Class="invisible d-none">
+                                <MudTextField Label="Facebook Link" MaxLength="256" @bind-Value="obj_CandidateModel.FaceBookLink" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Facebook" Variant="Variant.Outlined" Margin="Margin.Dense" />
+                                 <ValidationMessage For="@(() => obj_CandidateModel.FaceBookLink)" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="3" lg="3" Class="invisible d-none">
+                                <MudTextField Label="Twitter Link" MaxLength="256" @bind-Value="obj_CandidateModel.TwitterLink" Adornment="Adornment.End" Variant="Variant.Outlined" Margin="Margin.Dense" />
+                                 <ValidationMessage For="@(() => obj_CandidateModel.TwitterLink)" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="3" lg="3">
+                                <MudTextField Label="LinkedIn Link" MaxLength="256" @bind-Value="obj_CandidateModel.LinkedinLink" Adornment="Adornment.End" Variant="Variant.Outlined" Margin="Margin.Dense" />
+                                 <ValidationMessage For="@(() => obj_CandidateModel.LinkedinLink)" />
+                            </MudItem>
+                        </MudGrid>
+
+                        <MudGrid>
+                            <MudItem xs="12" md="4" lg="4">
+                                <MudCard>
+                                    <MudCardHeader>
+                                        <CardHeaderAvatar>
+                                            <MudAvatar Class="colorBGblue">
+                                                <MudIcon Icon="@Icons.Filled.AccountCircle"></MudIcon>
+                                            </MudAvatar>
+                                        </CardHeaderAvatar>
+                                        <CardHeaderContent>
+                                            <MudGrid>
+                                            <MudItem xs="12" md="8" lg="8" Class="pt-0">
+                                                @if (IsLodingImg == true)
+                                                {
+                                                    <AsyncMiniLoader />
+                                                }
+                                                <InputFile id="ImageURL" OnChange="UploadImage" hidden multiple accept=".jpg, .jpeg, .png" />
+                                                <MudButton HtmlTag="label" Variant="Variant.Filled"
+                                                           StartIcon="@Icons.Filled.CloudUpload"
+                                                           Class="my-3 colordfault" for="ImageURL">
+                                                        Upload Photo
+                                                </MudButton>
+                                                 <ValidationMessage For="@(() => obj_CandidateModel.ImageURL)" />
+                                            </MudItem>
+
+                                            @if (@obj_CandidateModel.ImageURL != null && @obj_CandidateModel.ImageURL != "")
+                                            {
+                                                <MudItem xs="12" md="4" lg="4" Class="pt-0">
+                                                    <MudCard Class="card">
+                                                        <MudCardHeader Style="padding: 5px; text-align:right;">
+                                                            <CardHeaderContent>
+                                                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Style="color:#FFF !important" @onclick="DeleteImage" />
+                                                            </CardHeaderContent>
+                                                        </MudCardHeader>
+                                                        <MudCardContent Style="padding: 5px; text-align:center; margin-left:16px;">
+                                                            <MudCardMedia class="rounded-circle" Image="@obj_CandidateModel.ImageURL" Style="height:100px; width:100px" />
+                                                        </MudCardContent>
+                                                    </MudCard>
+                                                </MudItem>
+                                            }
+                                        </MudGrid>
+                                            @*<MudText Typo="Typo.body1">Upload Profile Photo </MudText>*@
+                                            @*<MudText Typo="Typo.body2">Peninsula in Europe</MudText>*@
+                                        </CardHeaderContent>
+                                    </MudCardHeader>
+                                    <MudCardContent Style="padding: 5px;">
+                                        
+                                    </MudCardContent>
+                                </MudCard>
+                            </MudItem>
+
+                            <MudItem xs="12" md="4" lg="4">
+                                <MudCard>
+                                    <MudCardHeader>
+                                        <CardHeaderAvatar>
+                                            <MudAvatar Class="colorBGblue">
+                                                <MudIcon Icon="@Icons.Filled.FilePresent"></MudIcon>
+                                            </MudAvatar>
+                                        </CardHeaderAvatar>
+                                        <CardHeaderContent>
+                                            <MudGrid>
+                                            <MudItem xs="12" md="8" lg="8" Class="pt-0">
+                                                @if (IsLodingResume == true)
+                                                {
+                                                    <AsyncMiniLoader />
+                                                }
+
+                                                <InputFile id="ResumeURL" OnChange="UploadResume" hidden accept=".pdf"/>
+                                                <MudButton HtmlTag="label" Variant="Variant.Filled"
+                                                           StartIcon="@Icons.Filled.CloudUpload"
+                                                           Class="my-3 colordfault" for="ResumeURL">
+                                                        Resume & Cover Letter (Upload single PDF file)
+                                                </MudButton>
+                                                 <ValidationMessage For="@(() => obj_CandidateModel.ResumeURL)" />
+                                            </MudItem>
+                                            @if (@obj_CandidateModel.ResumeURL != null && @obj_CandidateModel.ResumeURL != "")
+                                            {
+                                                <MudItem xs="12" md="4" lg="4" Class="pt-0">
+                                                    <MudCard Class="card mt-2">
+                                                        <MudCardHeader Style="padding: 5px; text-align:center; margin-left:16px;">
+                                                            <CardHeaderContent>
+                                                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Style="color:#FFF !important" @onclick="DeleteResume" />
+                                                            </CardHeaderContent>
+                                                        </MudCardHeader>
+                                                        <MudCardContent Style="padding: 5px; text-align:center; margin-left:16px;">
+                                                            @if (@obj_CandidateModel.ResumeURL != "")
+                                                            {
+                                                                @if (@FileExtension == ".pdf")
+                                                                {
+                                                                    <MudCardMedia Image="./Images/pdf.png" class="rounded-circle" Style="height:100px; width:100px" />
+                                                                }
+                                                                else @if (@FileExtension == ".doc" || @FileExtension == ".docx")
+                                                                {
+                                                                    <MudCardMedia Image="./Images/word.png" class="rounded-circle" Style="height:100px; width:100px" />
+                                                                }
+                                                                else @if (@FileExtension == ".xls" || @FileExtension == ".xlsx")
+                                                                {
+                                                                    <MudCardMedia Image="./Images/excel.png" class="rounded-circle" Style="height:100px; width:100px" />
+                                                                }
+                                                                else @if (@FileExtension == ".rar")
+                                                                {
+                                                                    <MudCardMedia Image="./Images/rar.png" class="rounded-circle" Style="height:100px; width:100px" />
+                                                                }
+                                                                else @if (@FileExtension == ".zip")
+                                                                {
+                                                                    <MudCardMedia Image="./Images/zip.png" class="rounded-circle" Style="height:100px; width:100px" />
+                                                                }
+                                                                else
+                                                                {
+                                                                    <MudCardMedia Image="./Images/pdf.png" class="rounded-circle" Style="height:100px; width:100px" />
+                                                                }
+                                                            }
+                                                        </MudCardContent>
+                                                    </MudCard>
+                                                </MudItem>
+                                            }
+                                        </MudGrid>
+                                            @*<MudText Typo="Typo.body1">Upload Resume </MudText>*@
+                                        </CardHeaderContent>
+                                    </MudCardHeader>
+                                    <MudCardContent Style="padding: 5px;">
+                                        
+                                    </MudCardContent>
+                                </MudCard>
+                            </MudItem>
+                        </MudGrid>
+
+                        <MudGrid>
+                            <MudItem xs="12" sm="4" md="4" lg="4" Class="invisible d-none">
+                                <MudSwitch @bind-Checked="obj_CandidateModel.Disabled" Color="Color.Secondary">Specially abled</MudSwitch>
+                            </MudItem>
+
+                            <MudItem xs="12" sm="4" md="4" lg="4" Class="invisible d-none">
+                                <MudSwitch @bind-Checked="obj_CandidateModel.CanTravel" Color="Color.Secondary">Can Travel</MudSwitch>
+                            </MudItem>
+
+                            <MudItem xs="12" sm="4" md="4" lg="4" Class="invisible d-none">
+                                <MudSwitch @bind-Checked="obj_CandidateModel.CanRelocate" Color="Color.Secondary"> Can Relocate </MudSwitch>
+                            </MudItem>
+                        </MudGrid>
+                    </MudTabPanel>
+                    <MudTabPanel Text="Professional Experience" Icon="@Icons.Material.Filled.AssignmentInd">
+                        <div style="text-align: right;">
+                            <MudFab @onclick="AddValue" Color="Color.Success" Class="mr-2" Size="Size.Small" title="Add History" StartIcon="@Icons.Material.Filled.Add" />
+                        </div>
+                        <MudGrid>
+                            <MudItem xs="12" sm="12" md="12" lg="12">
+                            @for (int i = 0; i < obj_CandidateModel.CandidateExperiences.Count; i++)
+                            {
+                                int j = i;
+                                int index = (i + 1);
+                                <MudCard Elevation="4" Class="rounded-lg padd-10 mb-4">
+                                    <MudCardHeader>
+                                        <CardHeaderContent>
+                                            <MudText Class="colorblue"><b>History - @index </b></MudText>
+                                        </CardHeaderContent>
+                                        <CardHeaderActions>
+                                            <div>
+                                                <MudFab @onclick="() => RemoveValue(j)" Color="Color.Success" Size="Size.Small" title="Close" StartIcon="@Icons.Material.Filled.Delete" />
+                                            </div>
+                                        </CardHeaderActions>
+                                    </MudCardHeader>
+                                    <MudCardContent style="padding-top: 0px !important;">
+                                        <MudGrid>
+                                            <MudItem xs="12" md="6" lg="4">
+                                                <MudTextField Label="Employer *" @bind-Value="@obj_CandidateModel.CandidateExperiences[j].Employer" MaxLength="50" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.BusinessCenter" AdornmentColor="Color.Secondary" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
+                                            </MudItem>
+                                            <MudItem xs="12" md="6" lg="4">
+                                                <MudTextField Label="Position" @bind-Value="@obj_CandidateModel.CandidateExperiences[j].Position" MaxLength="30" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.AssignmentLate" Margin="Margin.Dense"></MudTextField>
+                                            </MudItem>
+                                            <MudItem xs="12" md="6" lg="4">
+                                                <MudTextField Label="Internet Address" @bind-Value="@obj_CandidateModel.CandidateExperiences[j].EmployerURL" MaxLength="256" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Attachment" Margin="Margin.Dense"></MudTextField>
+                                            </MudItem>
+                                            <MudItem xs="12" md="6" lg="4">
+                                                <MudTextField Label="Telephone" @bind-Value="@obj_CandidateModel.CandidateExperiences[j].EmployerContactNo" MaxLength="15" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.PhoneInTalk" Margin="Margin.Dense"></MudTextField>
+                                            </MudItem>
+                                            <MudItem xs="12" md="6" lg="4">
+                                                <MudTextField Label="Location" @bind-Value="@obj_CandidateModel.CandidateExperiences[j].EmployerLocation" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.AddLocation" MaxLength="50" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
+                                            </MudItem>
+                                            <MudItem xs="12" md="6" lg="4">
+                                                <MudDatePicker @bind-Date="@obj_CandidateModel.CandidateExperiences[j].StartDate" PickerVariant="PickerVariant.Dialog" Editable="true" Label="Start Date *"
+                                                           DateFormat="dd/MM/yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" Color="Color.Secondary" Rounded="true" AdornmentColor="Color.Secondary"></MudDatePicker>
+                                            </MudItem>
+                                            <MudItem xs="12" md="6" lg="4">
+                                                <MudDatePicker @bind-Date="@obj_CandidateModel.CandidateExperiences[j].EndDate" PickerVariant="PickerVariant.Dialog" Editable="true" Label="End Date"
+                                                           DateFormat="dd/MM/yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" Color="Color.Info" Rounded="true"></MudDatePicker>
+                                            </MudItem>
+
+                                            <MudItem xs="12" md="8" lg="8">
+                                                <MudTextField Label="Notes" @bind-Value="@obj_CandidateModel.CandidateExperiences[j].Notes" Lines="3" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.FormatAlignJustify" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
+                                            </MudItem>
+                                            <div Style="display:none">
+                                                <MudTextField class="form-control" placeholder="Start Date" @bind-Value="@obj_CandidateModel.CandidateExperiences[j].StartDate" MaxLength="10"></MudTextField>
+                                                <MudTextField class="form-control" placeholder="End Date" @bind-Value="@obj_CandidateModel.CandidateExperiences[j].EndDate" MaxLength="10"></MudTextField>
+                                            </div>
+                                        </MudGrid>
+                                    </MudCardContent>
+                                </MudCard>
+                            }
+                            </MudItem>
+                        </MudGrid>
+                    </MudTabPanel>
+                    <MudTabPanel Text="Education Summary" Icon="@Icons.Material.Filled.CastForEducation">
+                        <div style="text-align: right;">
+                            <MudFab @onclick="AddEducationValue" Class="mr-2" Color="Color.Success" Size="Size.Small" title="Add History" StartIcon="@Icons.Material.Filled.Add" />
+                        </div>
+                        <MudGrid>
+                            <MudItem xs="12" sm="12" md="12" lg="12">
+                            @for (int i = 0; i < obj_CandidateModel.CandidateEducations.Count; i++)
+                            {
+
+                                int j = i;
+                                int index = (i + 1);
+                                <MudCard Elevation="4" Class="rounded-lg padd-10 mb-4">
+                                    <MudCardHeader>
+                                        <CardHeaderContent>
+                                            <MudText Class="colorblue"><b> Educations - @index </b></MudText>
+                                        </CardHeaderContent>
+                                        <CardHeaderActions>
+                                            <div>
+                                                <MudFab @onclick="() => RemoveEducationValue(j)" Color="Color.Success" Size="Size.Small" title="Close" StartIcon="@Icons.Material.Filled.Delete" />
+                                            </div>
+                                        </CardHeaderActions>
+                                    </MudCardHeader>
+                                    <MudCardContent style="padding-top: 0px !important;">
+                                        <MudGrid>
+                                            <MudItem xs="12" md="4" lg="3">
+                                                <MudSelect @bind-Value="obj_CandidateModel.CandidateEducations[j].EducationERPRecId" Label="Education *" Variant="Variant.Outlined" Margin="Margin.Dense" AdornmentColor="Color.Secondary">
+                                                    @foreach (var selectItem in obj_EducationDTO)
+                                                    {
+                                                    <MudSelectItem Value="@selectItem.ERPRecId"> @selectItem.Code </MudSelectItem>
+                                                    }
+                                            </MudSelect>
+                                        </MudItem>
+                                        <MudItem xs="12" md="4" lg="3">
+                                            <MudDatePicker @bind-Date="@obj_CandidateModel.CandidateEducations[j].StartDate" PickerVariant="PickerVariant.Dialog" Editable="true" Label="Start Date"
+                                                           DateFormat="dd/MM/yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" Color="Color.Secondary" Rounded="true"></MudDatePicker>
+                                        </MudItem>
+                                        <MudItem xs="12" md="4" lg="3">
+                                            <MudDatePicker @bind-Date="@obj_CandidateModel.CandidateEducations[j].EndDate" PickerVariant="PickerVariant.Dialog" Editable="true" Label="End Date"
+                                                           DateFormat="dd/MM/yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" Color="Color.Info" Rounded="true"></MudDatePicker>
+                                        </MudItem>
+                                        <MudItem xs="12" md="4" lg="3">
+                                            <MudTextField Label="Grade" @bind-Value="@obj_CandidateModel.CandidateEducations[j].AvgGrade" MaxLength="10" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Grade" Variant="Variant.Outlined" Color="Color.Secondary" Rounded="true" Margin="Margin.Dense" />
+                                        </MudItem>
+                                        <MudItem xs="12" md="4" lg="3" class="invisible d-none">
+                                            <MudTextField Label="Scale" @bind-Value="@obj_CandidateModel.CandidateEducations[j].Scale" MaxLength="10" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.CallMade" Color="Color.Secondary" Rounded="true" Variant="Variant.Outlined" Margin="Margin.Dense" />
+                                        </MudItem>
+                                    </MudGrid>
+                                    <div Style="display:none">
+                                        <MudTextField class="form-control" placeholder="Start Date" @bind-Value="@obj_CandidateModel.CandidateEducations[j].StartDate" MaxLength="10" Margin="Margin.Dense"></MudTextField>
+                                        <MudTextField class="form-control" placeholder="End Date" @bind-Value="@obj_CandidateModel.CandidateEducations[j].EndDate" MaxLength="10" Margin="Margin.Dense"></MudTextField>
+                                    </div>
+                                </MudCardContent>
+                            </MudCard>
+                            }
+                            </MudItem>
+                        </MudGrid>
+                    </MudTabPanel>
+                    <MudTabPanel Text="Skill" Icon="@Icons.Material.Filled.AccountTree" Class="invisible d-none">
+                        <div style="text-align: right;">
+                            <MudFab @onclick="AddSkillValue" Class="mr-2" Color="Color.Success" Size="Size.Small" title="Add Skill" StartIcon="@Icons.Material.Filled.Add" />
+                        </div>
+                        <MudGrid>
+                            <MudItem xs="12" sm="12" md="12" lg="12">
+
+                            @for (int i = 0; i < obj_CandidateModel.CandidateSkills.Count; i++)
+                            {
+                                int j = i;
+                                int index = (i + 1);
+                                <MudCard Elevation="4" Class="rounded-lg padd-10 mb-4">
+                                    <MudCardHeader>
+                                        <CardHeaderContent>
+                                            <MudText Class="colorblue"><b> Skill - @index </b></MudText>
+                                        </CardHeaderContent>
+                                        <CardHeaderActions>
+                                            <div>
+                                                <MudFab @onclick="() => RemoveSkillValue(j)" Color="Color.Success" Size="Size.Small" title="Close" StartIcon="@Icons.Material.Filled.Delete" />
+                                            </div>
+                                        </CardHeaderActions>
+                                    </MudCardHeader>
+                                    <MudCardContent style="padding-top: 0px !important;">
+                                        <MudGrid>
+                                            <MudItem xs="12" md="4" lg="3">
+                                                <MudSelect @bind-Value="obj_CandidateModel.CandidateSkills[j].SkillERPRecId" Label="Skill *" Variant="Variant.Outlined" Margin="Margin.Dense" AdornmentColor="Color.Secondary">
+                                                    @foreach (var selectItem in obj_SkillDTO)
+                                                    {
+                                                    <MudSelectItem Value="@selectItem.ERPRecId"> @selectItem.Code </MudSelectItem>
+                                                    }
+                                            </MudSelect>
+                                        </MudItem>
+                                        <MudItem xs="12" md="4" lg="3">
+                                            <MudSelect @bind-Value="obj_CandidateModel.CandidateSkills[j].SkillLevelERPRecId" Label="Skill Level *" Variant="Variant.Outlined" Margin="Margin.Dense" AdornmentColor="Color.Secondary">
+                                                @foreach (var selectItem in obj_SkillLevelDTO)
+                                                    {
+                                                    <MudSelectItem Value="@selectItem.ERPRecId"> @selectItem.Code </MudSelectItem>
+                                                    }
+                                            </MudSelect>
+                                        </MudItem>
+                                        <MudItem xs="12" md="4" lg="3">
+                                            <MudDatePicker @bind-Date="@obj_CandidateModel.CandidateSkills[j].LevelDate" PickerVariant="PickerVariant.Dialog" Editable="true" Label="Level Date *"
+                                                           DateFormat="dd/MM/yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" placeholder="Level Date" Color="Color.Secondary" Rounded="true" AdornmentColor="Color.Secondary"></MudDatePicker>
+                                        </MudItem>
+                                        <MudItem xs="12" md="4" lg="3">
+                                            <MudTextField Label="Year Experiance" @bind-Value="@obj_CandidateModel.CandidateSkills[j].YearOfExperience" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.ViewTimeline" Margin="Margin.Dense" MaxLength="20" />
+                                        </MudItem>
+                                        <MudItem xs="12" md="4" lg="3">
+                                            &nbsp;
+                                        </MudItem>
+                                        <MudItem xs="12" md="4" lg="3">
+                                            &nbsp;
+                                        </MudItem>
+                                        <MudItem xs="12" md="4" lg="3">
+                                            <div Style="display:none">
+                                                <MudTextField class="form-control" placeholder="Level Date *" @bind-Value="@obj_CandidateModel.CandidateSkills[j].LevelDate" MaxLength="10" Margin="Margin.Dense" AdornmentColor="Color.Secondary" Rounded="true"></MudTextField>
+                                            </div>
+                                        </MudItem>
+                                    </MudGrid>
+                                </MudCardContent>
+                            </MudCard>
+                            }
+                            </MudItem>
+                        </MudGrid>
+                    </MudTabPanel>
+                    <MudTabPanel Text="Certificate" Icon="@Icons.Filled.Article">
+                        <div style="text-align: right;">
+                            <MudFab @onclick="AddCertiValue" Class="mr-2" Color="Color.Success" Size="Size.Small" title="Add Certificate"
+                                    StartIcon="@Icons.Material.Filled.Add" />
+                        </div>
+                        <MudGrid>
+                            <MudItem xs="12" sm="12" md="12" lg="12">
+                            @for (int i = 0; i < obj_CandidateModel.CandidateCertificateTypes.Count; i++)
+                            {
+                                int j = i;
+                                int index = (i + 1);
+
+                                <MudCard Elevation="4" Class="rounded-lg padd-10 mb-4">
+                                    <MudCardHeader>
+                                        <CardHeaderContent>
+                                            <MudText Class="colorblue"><b> Certificate - @index </b></MudText>
+                                        </CardHeaderContent>
+                                        <CardHeaderActions>
+                                            <div>
+                                                <MudFab @onclick="() => RemoveCertiValue(j)" Color="Color.Success" Size="Size.Small" title="Close" StartIcon="@Icons.Material.Filled.Delete" />
+                                            </div>
+                                        </CardHeaderActions>
+                                    </MudCardHeader>
+                                    <MudCardContent style="padding-top: 0px !important;">
+                                        <MudGrid>
+
+                                            <MudItem xs="12" md="4" lg="3">
+                                                <MudSelect @bind-Value="obj_CandidateModel.CandidateCertificateTypes[j].CertificateTypeERPRecId" Label="Certificate Type *" Variant="Variant.Outlined" Margin="Margin.Dense" AdornmentColor="Color.Secondary">
+                                                    @foreach (var selectItem in obj_CertificateTypeDTO)
+                                                    {
+                                                    <MudSelectItem Value="@selectItem.ERPRecId"> @selectItem.Code </MudSelectItem>
+                                                    }
+                                            </MudSelect>
+                                        </MudItem>
+
+                                        <MudItem xs="12" md="4" lg="3">
+                                            <MudDatePicker @bind-Date="@obj_CandidateModel.CandidateCertificateTypes[j].StartDate" PickerVariant="PickerVariant.Dialog" Editable="true" Label="Start Date *" 
+                                                           DateFormat="dd/MM/yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" MaxDate="@DateTime.Today" Color="Color.Secondary" Rounded="true" AdornmentColor="Color.Secondary"></MudDatePicker>
+                                        </MudItem>
+
+                                        <MudItem xs="12" md="4" lg="3">
+                                            <MudDatePicker @bind-Date="@obj_CandidateModel.CandidateCertificateTypes[j].EndDate" PickerVariant="PickerVariant.Dialog" Editable="true" Label="End Date"
+                                                           DateFormat="dd/MM/yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" MaxDate="@DateTime.Today" Color="Color.Info" Rounded="true"></MudDatePicker>
+                                        </MudItem>
+
+                                        <MudItem xs="12" md="4" lg="3">
+                                            <MudSwitch @bind-Checked="obj_CandidateModel.CandidateCertificateTypes[j].RenewalRequired" Color="Color.Secondary">Renewal Required</MudSwitch>
+                                        </MudItem>
+                                        <MudItem xs="12" md="12" lg="8">
+                                            <MudTextField Label="Notes" @bind-Value="@obj_CandidateModel.CandidateCertificateTypes[j].Notes" Lines="3" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.FormatAlignJustify" Margin="Margin.Dense" MaxLength="1024" />
+                                        </MudItem>
+                                    </MudGrid>
+                                    <div Style="display:none">
+                                        <MudTextField class="form-control" placeholder="Start Date" @bind-Value="@obj_CandidateModel.CandidateCertificateTypes[j].StartDate" MaxLength="10" Margin="Margin.Dense"></MudTextField>
+                                        <MudTextField class="form-control" placeholder="End Date" @bind-Value="@obj_CandidateModel.CandidateCertificateTypes[j].EndDate" MaxLength="10" Margin="Margin.Dense"></MudTextField>
+                                    </div>
+                                </MudCardContent>
+                            </MudCard>
+                            }
+                            </MudItem>
+                        </MudGrid>
+                    </MudTabPanel>
+                </MudTabs>
+            </div>
+            <div class="modal-footer">
+                <div style="float: right">
+                  <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success">Register</MudButton>
+                  <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="OnInitializedAsync"> Reset </MudButton>
+                </div>
+            </div>
+        </EditForm>
+        </DialogContent>
+      @*  <DialogActions>
+           
+        </DialogActions>*@
+    </MudDialog>

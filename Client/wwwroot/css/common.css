@@ -1,0 +1,128 @@
+﻿
+
+.form-control {
+    background-color: transparent !important;
+    padding: 14.0px 14px !important;
+    border: 1px solid #bdbdbd;
+}
+
+    .form-control:focus {
+        border-color: rgb(62,44,221) !important;
+        border: 2px solid rgb(62,44,221) !important;
+        box-shadow: none !important;
+    }
+
+.colorblue {
+    color: #A1263E !important;
+}
+
+.colorBGblue {
+    background-color: #A1263E !important;
+    color: #FFF !important;
+}
+
+.mud-switch-secondary.mud-checked {
+    color: #A1263E !important;
+}
+
+.mud-tab.mud-tab-active {
+    color: #A1263E !important;
+    font-weight: 700;
+}
+
+.colordfault {
+    color: #1f355e !important;
+}
+
+.mud-tabs.mud-tabs-rounded {
+    border-radius: var(--mud-default-borderradius);
+    box-shadow: 1px 1px 14px -2px rgb(0 0 0 / 10%);
+}
+
+.colorwhite {
+    color: #FFF !important
+}
+
+.mybuttonFixed {
+    position: fixed;
+    bottom: 20px;
+    right: 50px;
+}
+
+.mybuttonFixed2 {
+    position: fixed;
+    bottom: 20px;
+    right: 140px;
+}
+
+.mud-input-control > .mud-input-control-input-container > .mud-input-label-inputcontrol {
+    font-size: 0.8rem;
+}
+
+.mud-fab-success {
+    color: #FFF;
+    background-color: #a1263e !important;
+}
+
+    .mud-fab-success:hover {
+        color: #FFF;
+        background-color: #d33a58 !important;
+    }
+
+.mud-button-filled.mud-button-filled-success {
+    color: #FFF;
+    background-color: #a1263e !important;
+}
+
+    .mud-button-filled.mud-button-filled-success:hover {
+        color: #FFF;
+        background-color: #d33a58 !important;
+    }
+
+.mud-chip-filled.mud-chip-color-secondary {
+    color: #FFF !important;
+    background-color: #a1263e !important;
+}
+
+.mud-tab-slider {
+    position: absolute;
+    background: #a1263e !important;
+}
+
+.headerback {
+    background: rgb(161,38,62) !important;
+    color: #FFF !important;
+}
+.modal {
+    z-index: 111111 !important;
+}
+
+.modal-backdrop {
+    z-index: 11111 !important;
+}
+
+.float-rt {
+    float:right !important;
+    /*margin-right:10px !important;*/
+}
+
+
+.loader {
+    position: fixed;
+   /* top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgb(256, 256, 256);*/
+    transition: opacity 0.2s;
+    z-index: 99999999 !important;
+    /*display: block;*/
+}
+
+    /* (B) CENTER LOADING SPINNER */
+.loader img {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%);
+}

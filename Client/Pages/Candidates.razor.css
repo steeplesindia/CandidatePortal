@@ -1,0 +1,17 @@
+﻿
+@media (min-width: 992px) {
+    .modal-lg, .modal-xl {
+        max-width: 90% !important;
+    }
+    .modal-dialog {
+        max-width: 90% !important;
+        margin: 1.75rem auto;
+    }
+}
+
+@media (min-width: 576px) {
+    .modal-dialog {
+        max-width: 80% !important;
+        margin: 1.75rem auto;
+    }
+}

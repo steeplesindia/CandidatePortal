@@ -1,0 +1,169 @@
+﻿@using CandidatePortal.Client.Componets
+@page "/questionaries/{ApplicationNumber:long}"
+@using Blazored.TextEditor
+@using CandidatePortal.Client.Model
+
+<MudBreadcrumbs Items="@_items">
+    <ItemTemplate Context="item">  
+        @if (@item.Text.ToLower() == "home")
+        {
+            <MudLink Href="@item.Href"  Class="colorblue"><MudIcon Class="ma-4" Icon="@Icons.Material.Filled.Home"/> @langaugecontainer.Keys["Home"]</MudLink>  
+        }
+        else if (@item.Text.ToLower() == "appliedjob")
+        {
+            <MudLink Href="@item.Href"  Class="colorblue"> <MudIcon Class="ma-4" Icon="@Icons.Material.Filled.AdsClick"/> @langaugecontainer.Keys["Applied Job"]</MudLink>  
+        }
+        else if (@item.Text.ToLower() == "application quiestionnaires")
+        {
+            <MudLink Href="@item.Href" Disabled="true"> <MudIcon Class="ma-4" Icon="@Icons.Material.Filled.AdsClick" /> @langaugecontainer.Keys["Application Quiestionnaires"]</MudLink>  
+        }
+    </ItemTemplate>
+</MudBreadcrumbs>
+
+
+@if(IsLoding)
+{
+    <AsyncLoader />
+}
+
+ <CascadingValue Value="SetTitleEvent">
+<EditForm Model="@AppsQuesMainModel" OnValidSubmit="EditAppsQuestionnariesAsync" enctype="multipart/form-data">
+
+    @if (@AppsQuesMainModel != null && @AppsQuesMainModel.ApplicationQuestionnaireLine.Count() > 0)
+    {
+        <Wizard Id="DemoWizard">
+            <MudGrid>
+                <MudItem xs="12" sm="12" md="12" lg="12" Class="mt-3">
+                    @for (int i = 0; i < AppsQuesMainModel.ApplicationQuestionnaireLine.Count(); i++)
+                    {
+                        int j = i;
+                        int index = (i + 1);
+                        <WizardStep Name="@AppsQuesMainModel.ApplicationQuestionnaireLine[j].Text">
+                            <MudCard Elevation="4" Class="rounded-lg padd-10 mb-4">
+                                <MudCardHeader>
+                                    <CardHeaderContent>
+                                        <MudText Class="colorblue"><b> Q: - @index </b> @AppsQuesMainModel.ApplicationQuestionnaireLine[j].Text </MudText>
+                                    </CardHeaderContent>
+                                    <CardHeaderActions>
+                                        <span class="mud-chip-content"> @index Of @AppsQuesMainModel.ApplicationQuestionnaireLine.Count()  </span>
+                                        @*<MudText Typo="Typo.body1"> @index Of @AppsQuesMainModel.ApplicationQuestionnaireLine.Count()  </MudText>*@
+                                    </CardHeaderActions>
+                                </MudCardHeader>
+                                <MudCardContent style="padding-top: 0px !important;">
+                                    <MudGrid>
+                                        @if (@AppsQuesMainModel.ApplicationQuestionnaireLine[j].Type == 0) //Text
+                                        {
+                                            <MudItem xs="12" md="12" lg="12">
+                                                <MudTextField Label="@langaugecontainer.Keys["Answer"]" @bind-Value="@AppsQuesMainModel.ApplicationQuestionnaireLine[j].Answer" MaxLength="1000" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Article" AdornmentColor="Color.Secondary" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
+                                            </MudItem>
+                                        }
+                                        else if(@AppsQuesMainModel.ApplicationQuestionnaireLine[j].Type == 1) //Number
+                                        {
+                                             <MudItem xs="12" md="12" lg="12">
+                                                 @*Question_NumberId*@
+                                                <MudNumericField HideSpinButtons="true" Label="@langaugecontainer.Keys["Answer"]" @bind-Value="@AppsQuesMainModel.ApplicationQuestionnaireLine[j].AnswerNumberId" MaxLength="10" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Article" AdornmentColor="Color.Secondary" Variant="Variant.Outlined" Margin="Margin.Dense"></MudNumericField>
+                                            </MudItem>
+                                        }
+                                        else if(@AppsQuesMainModel.ApplicationQuestionnaireLine[j].Type == 2) //Float (Real)
+                                        {
+                                             <MudItem xs="12" md="12" lg="12">
+                                                 @*Question_FloatId*@
+                                                <MudNumericField HideSpinButtons="true" Label="@langaugecontainer.Keys["Answer"]" @bind-Value="@AppsQuesMainModel.ApplicationQuestionnaireLine[j].AnswerFloatId" MaxLength="10" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Article" AdornmentColor="Color.Secondary" Variant="Variant.Outlined" Margin="Margin.Dense"></MudNumericField>
+                                            </MudItem>
+                                        }
+                                        else if(@AppsQuesMainModel.ApplicationQuestionnaireLine[j].Type == 3) //Date Picker
+                                        {
+                                            <MudItem xs="12" md="6" lg="4">
+                                                @*Question_DateId*@
+                                                <MudDatePicker Label="@langaugecontainer.Keys["Date"]" PickerVariant="PickerVariant.Dialog" Editable="true" @bind-Date="AppsQuesMainModel.ApplicationQuestionnaireLine[j].AnswerDateTimeId" Placeholder="@langaugecontainer.Keys["Select Date"]" DateFormat="dd/MM/yyyy" 
+                                                Variant="Variant.Outlined" Margin="Margin.Dense" Color="Color.Secondary" Rounded="true" AdornmentColor="Color.Secondary" />
+                                            </MudItem>
+                                        }
+                                        else if(@AppsQuesMainModel.ApplicationQuestionnaireLine[j].Type == 4) //Time Picker
+                                        {
+                                            <MudItem xs="12" md="6" lg="4">
+                                                @*Question_TimeId*@
+                                                <MudTimePicker Label="@langaugecontainer.Keys["Time"]" AmPm="true" @bind-Time="AppsQuesMainModel.ApplicationQuestionnaireLine[j].AnswerTimeId" />
+                                            </MudItem>
+                                        }
+                                        else if(@AppsQuesMainModel.ApplicationQuestionnaireLine[j].Type == 5) // Multiline
+                                        {
+                                            <MudItem xs="12" md="12" lg="12">
+                                                <MudTextField Label="@langaugecontainer.Keys["Answer"]" @bind-Value="@AppsQuesMainModel.ApplicationQuestionnaireLine[j].Answer" Lines="6"  MaxLength="1000" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Article" AdornmentColor="Color.Secondary" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
+                                            </MudItem>
+                                        }
+                                        @*else if(@AppsQuesMainModel.ApplicationQuestionnaireLine[j].Type == 6) //Check Box
+                                        {
+                                            <MudItem xs="12" md="12" lg="12">
+                                                 <MudCheckBox @bind-Checked="@AppsQuesMainModel.ApplicationQuestionnaireLine[j].Answer" Converter="@(new CustomStringToBoolConverter())"> @(AppsQuesMainModel.ApplicationQuestionnaireLine[j].Answer) </MudCheckBox>
+                                            </MudItem>
+                                        }*@
+                                        else if(@AppsQuesMainModel.ApplicationQuestionnaireLine[j].Type == 7) // Radio
+                                        {
+                                            <MudItem xs="12" md="12" lg="12">
+                                                @if(@AppsQuesMainModel.ApplicationQuestionnaireLine[j].ApplicationQuestionnaireLineAnswer.Count() > 0)
+                                                {
+                                                    <MudRadioGroup @bind-SelectedOption="@AppsQuesMainModel.ApplicationQuestionnaireLine[j].Answer">
+                                                       @foreach (var item in @obj_ApplicationQuestionnaireLine[j].ApplicationQuestionnaireLineAnswer)
+                                                       {
+                                                            <MudRadio Option="@item.Text" Color="Color.Primary"> @item.Text </MudRadio>
+                                                       }
+                                                    </MudRadioGroup>
+                                                }
+                                            </MudItem>
+                                        }
+                                        else if(@AppsQuesMainModel.ApplicationQuestionnaireLine[j].Type == 8 || @AppsQuesMainModel.ApplicationQuestionnaireLine[j].Type == 6) //Drop Down
+                                        {
+                                            <MudItem xs="12" md="6" lg="4">
+                                                <MudSelect @bind-Value="@AppsQuesMainModel.ApplicationQuestionnaireLine[j].Answer" Label="@langaugecontainer.Keys["Select Answer"]" Variant="Variant.Outlined" Margin="Margin.Dense" AdornmentColor="Color.Secondary">
+                                                   @foreach (var item in @obj_ApplicationQuestionnaireLine[j].ApplicationQuestionnaireLineAnswer)
+                                                   {
+                                                        <MudSelectItem Value="@item.Text"> @item.Text </MudSelectItem>
+                                                   }
+                                                </MudSelect>
+                                            </MudItem>
+                                        }
+                                        
+                                        
+                                        <MudItem xs="12" md="12">
+                                            <MudTextField Label="@langaugecontainer.Keys["Comment"]" @bind-Value="@AppsQuesMainModel.ApplicationQuestionnaireLine[j].Comments" Lines="4" MaxLength="256" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.AutofpsSelect" Margin="Margin.Dense"></MudTextField>
+                                        </MudItem>
+
+                                         <div Style="display:none">
+                                            <MudTextField class="form-control" placeholder="Date" @bind-Value="@Question_DateId" MaxLength="10"></MudTextField>
+                                        </div>
+                                    </MudGrid>
+                                </MudCardContent>
+                            </MudCard>
+                        </WizardStep>
+                    }
+                </MudItem>
+            </MudGrid>
+        </Wizard>
+    }
+</EditForm>
+</CascadingValue>
+<style>
+    .nav
+    {
+        display: none !important;
+    }
+</style>
+@*<Wizard Id="DemoWizard">
+    <WizardStep Name="1">
+        <div class="row">
+            <p>This is the first step. You can enter something useful in here.</p>
+        </div>
+    </WizardStep>
+     <WizardStep Name="2">
+        <div class="row">
+            <p>This is the first step. You can enter something useful in here.</p>
+        </div>
+    </WizardStep>
+     <WizardStep Name="3">
+        <div class="row">
+            <p>This is the first step. You can enter something useful in here.</p>
+        </div>
+    </WizardStep>
+</Wizard>
+*@

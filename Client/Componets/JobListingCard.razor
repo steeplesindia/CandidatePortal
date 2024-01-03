@@ -1,0 +1,136 @@
+﻿
+
+@if (JobView == 0)
+{
+    <MudItem xs="12" sm="6" md="6">
+        <MudCard Elevation="4" Class="rounded-lg">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.body1" Class="colorblue ml-3"><b>@JobDTO.Code</b></MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudDivider></MudDivider>
+            <MudCardContent style="height:140px">
+                <div class="mb-2">
+                    <MudIcon Icon="@Icons.Filled.Api" Title="Description" Class="d-inline" Color="Color.Dark" />
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2"> <b>@langaugecontainer.Keys["Description"] : </b> @JobDTO.Description </MudText>
+                </div>
+
+                 <div class="mb-2">
+                    <MudIcon Icon="@Icons.Filled.LocationCity" Title="Start Date" Class="d-inline" Color="Color.Dark" />
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2">
+                        <b>@langaugecontainer.Keys["Locations"] : </b> @JobDTO.Locations
+                    </MudText>
+                </div>
+                
+                <div class="mb-2">
+                    <MudIcon Icon="@Icons.Filled.DateRange" Title="Start Date" Class="d-inline" Color="Color.Dark" />
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2">
+                        <b>@langaugecontainer.Keys["Application Deadline"] : </b>
+                        @if (@JobDTO.ApplicationDeadline != null)
+                        {
+                            @JobDTO.ApplicationDeadline.Value.ToShortDateString();
+                        }
+                    </MudText>
+                </div>
+
+                @*<div class="mb-2">
+                    <MudIcon Icon="@Icons.Filled.DateRange" Title="End Date" Class="d-inline" Color="Color.Dark" />
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2">
+                        <b>End Date : </b>
+                        @if (@JobDTO.ClosingDate != null)
+                        {
+                            @JobDTO.ClosingDate.ToString()
+                            ;
+                        }
+                    </MudText>
+                </div>*@
+
+            </MudCardContent>
+            <MudDivider></MudDivider>
+            <MudCardActions Class="d-flex justify-end">
+                <MudButton Variant="Variant.Outlined" Color="Color.Dark" Size="Size.Small" StartIcon="@Icons.Material.Outlined.RemoveRedEye" Style="text-transform:none" OnClick="AddToApplyJob">@langaugecontainer.Keys["View Posting"] </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+}
+else
+{
+    <MudItem xs="12" sm="12" md="12" Class="mx-2">
+        <MudCard Elevation="4" Class="rounded-lg padd-10 " Style="padding:10px !important">
+            <MudCardHeader>
+                @*<CardHeaderAvatar>
+                    <MudAvatar Image="icon-192.png" Size="Size.Medium" Elevation="4" Color="Color.Dark" />
+                </CardHeaderAvatar>*@
+                <CardHeaderContent>
+                    <MudText Typo="Typo.body1" Class="colorblue ml-3"><b>@JobDTO.Code</b></MudText>
+                </CardHeaderContent>
+                <CardHeaderActions>
+                    <div class="mr-2">
+                        <MudText Class="d-inline pa-2" Typo="Typo.body2">
+                            <b> <MudIcon Icon="@Icons.Filled.DateRange"></MudIcon> @langaugecontainer.Keys["Start Date"]: </b>
+                            @if (@JobDTO.OpeningDate != null)
+                            {
+                                @JobDTO.OpeningDate.Value.ToShortDateString();
+                                
+                            }
+                        </MudText>
+                        <MudText Class="d-inline pa-2" Typo="Typo.body2">
+                            <b> <MudIcon Icon="@Icons.Filled.DateRange"></MudIcon> @langaugecontainer.Keys["End Date"]: </b>
+                            @if (@JobDTO.ClosingDate != null)
+                            {
+                                @JobDTO.ClosingDate.Value.ToShortDateString();
+                                
+                            }
+                        </MudText>
+                    </div>
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudCardContent>
+                <div class="mb-2">
+                    <MudIcon Icon="@Icons.Filled.KeyboardDoubleArrowRight" Title="@langaugecontainer.Keys["Description"]" Class="d-inline colordfault" />
+                    <MudText Class="d-inline pa-2 fw-bold" Typo="Typo.body1"> @JobDTO.Description </MudText>
+
+                   @* <span class="mx-2">|</span>
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2"> </MudText>
+                    <MudIcon Icon="@Icons.Outlined.CalendarMonth" Title="Years of Experience" Class="d-inline colordfault" />
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2"> <b>Years of Experience : </b> 2 Years</MudText>
+                    <span class="mx-2">|</span>
+                    <MudIcon Icon="@Icons.Outlined.CurrencyRupee" Title="Salary Range" Class="d-inline colordfault" />
+                    <MudText Class="d-inline pa-2" Typo="Typo.body2"> <b>Salary Range : </b> 2 Years</MudText>*@
+                </div>
+              @*  <div class="mb-2">
+                    <MudChip Color="Color.Secondary" Variant="Variant.Filled" Class="colorwhite" Size="Size.Small">.Net Core</MudChip>
+                    <MudChip Color="Color.Secondary" Variant="Variant.Filled" Class="colorwhite" Size="Size.Small">C++</MudChip>
+                    <MudChip Color="Color.Secondary" Variant="Variant.Filled" Class="colorwhite" Size="Size.Small">Java Script</MudChip>
+                    <MudChip Color="Color.Secondary" Variant="Variant.Filled" Class="colorwhite" Size="Size.Small">Type Script</MudChip>
+                    <MudChip Color="Color.Secondary" Variant="Variant.Filled" Class="colorwhite" Size="Size.Small">Flutter</MudChip>
+                    <MudChip Color="Color.Secondary" Variant="Variant.Filled" Class="colorwhite" Size="Size.Small">Angular</MudChip>
+                    <MudChip Color="Color.Secondary" Variant="Variant.Filled" Class="colorwhite" Size="Size.Small">Blazor</MudChip>
+                </div>*@
+                <div class="mb-2">
+                    <MudText Typo="Typo.body2">
+                        @JobDTO.LongDescription.Substring(0, 120)
+                    </MudText>
+                </div>
+            </MudCardContent>
+          <MudCardActions Class="d-flex justify-end">
+                <MudButton Variant="Variant.Outlined" Color="Color.Dark" Size="Size.Small" StartIcon="@Icons.Material.Outlined.RemoveRedEye" Style="text-transform:none" OnClick="AddToApplyJob">@langaugecontainer.Keys["View Posting"] </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+}
+
+<style>
+    .mud-avatar.mud-avatar-medium {
+        margin: 0px !important;
+    }
+
+    .mud-card-content {
+        padding: 8px 16px !important;
+    }
+
+    .mud-card-header {
+        padding: 10px 10px 1px 8px !important;
+    }
+</style>

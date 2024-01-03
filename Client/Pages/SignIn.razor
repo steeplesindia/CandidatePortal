@@ -1,0 +1,58 @@
+﻿@page "/SignIn"
+@layout BlankLayout
+
+<div class="form-login-body">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 mx-auto login-desk">
+                <div class="row">
+                    <div class="col-md-7 col-lg-7 col-sm-6 col-xs-12 detail-box d-none d-sm-block">
+                        <img class="logo" src="../images/pngs/logo1.png" alt="">
+                        <div class="detailsh">
+                            <img class="help img-fluid" src="../images/pngs/NewProject.png" alt="">
+                            <p class="mt-5"> Don't have an account? <a href="" class="maroon"> Sign Up Now</a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-lg-5 col-sm-6 col-xs-12 padleftright">
+                        <div class="loginform borreadiuse">
+                            <div class="login-det">
+                                <h4 class="text-white">Welcome To Steeples</h4>
+                                <p style="color: #ff91a5 !important; font-size: 15px;">Signin to your Account</p>
+
+                                <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+                                    <div class="form-row">
+                                        <div class="input-group mb-3">
+                                            <MudTextField @bind-Value="model.Email" Label="Username" Variant="Variant.Outlined"
+                                                          Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.SupervisedUserCircle" style="background: #FFF !important; border-radius: 20px !important; border:0px !important" />
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="input-group mb-3">
+                                            <MudTextField @bind-Value="model.Password" Label="Password" Variant="Variant.Outlined"
+                                                          InputType="@PasswordInput" Adornment="Adornment.End"
+                                                          AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonTestclick" style="background: #FFF !important; border-radius: 20px !important; border:0px !important" />
+                                        </div>
+                                    </div>
+
+                                    <span class="text-left"> <MudSwitch @bind-Checked="@Basic_Switch2" Label="Remember Me?" Color="Color.Warning" Class="text-white" /> </span>
+
+                                    <MudButton Variant="Variant.Filled" Color="Color.Warning" FullWidth="true" Class="mt-1 mb-2 rounded-pill">Login</MudButton>
+                                    <p class="forget"><a href="" style="color: #ff91a5 !important;">Forget Password?</a></p>
+                                </EditForm>
+                            </div>
+                            <div class="login-det1 mt-2">
+                                <ul>
+                                    <li><a href="#" class="ml-2"><MudIcon Icon="@Icons.Custom.Brands.Facebook" Title="Facebook" Class="text-white" /></a></li>
+                                    <li><a href="#" class="ml-2"><MudIcon Icon="@Icons.Custom.Brands.Twitter" Title="Twitter" Class="text-white" /></a></li>
+                                    <li><a href="#" class="ml-2"><MudIcon Icon="@Icons.Custom.Brands.Instagram" Title="Instagram" Class="text-white" /></a></li>
+                                    <li><a href="#" class="ml-2"><MudIcon Icon="@Icons.Custom.Brands.LinkedIn" Title="LinkedIn" Class="text-white" /></a></li>
+                                    <li><a href="#" class="ml-2"><MudIcon Icon="@Icons.Custom.Brands.Google" Title="Google" Class="text-white" /></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,159 @@
+﻿.mud-container {
+    margin-top: 90px !important;
+}
+
+.mud-elevation-1 {
+    box-shadow: none !important;
+}
+
+.mud-nav-item {
+    padding-left: 4px !important;
+}
+
+
+.flex-grow-1 {
+    flex-grow: 0.2 !important;
+}
+
+.mudsvgsize {
+    font-size: 33px;
+    border-radius: 21px;
+}
+
+.mud-drawer-header {
+    display: flex;
+    padding: 17px 3px 9px;
+    @*25px 24px 9px 8px;
+    *@ background: #A1263E !important;
+    height: 5.5rem;
+}
+
+
+
+.mud-appbar {
+    background-color: #A1263E !important;
+}
+
+.mud-icon-button-label {
+    width: 100%;
+    display: flex;
+    align-items: inherit;
+    justify-content: inherit;
+    color: #FFF !important;
+}
+
+.mud-typography-h6 {
+    color: #FFF;
+}
+
+.mud-drawer .mud-drawer-content {
+    height: 100%;
+    max-height: 100%;
+    display: flex;
+    flex-shrink: 0;
+    flex-grow: 1;
+    flex: 0 0 auto;
+    flex-direction: column;
+    background: #A1263E !important;
+}
+
+.mud-nav-link:not(.mud-nav-link-disabled) .mud-nav-link-icon.mud-nav-link-icon-default {
+    color: #ffffff !important;
+}
+
+.mud-nav-link.active:not(.mud-nav-link-disabled) .mud-nav-link-icon.mud-nav-link-icon-default {
+    color: #00bd4f !important;
+}
+
+
+.mud-navmenu.mud-navmenu-default .mud-nav-link.active:not(.mud-nav-link-disabled) {
+    background: #251e35 !important;
+    border-radius: 3rem 0 0 3rem !important;
+    color: #FFF !important;
+    padding: 11px 19px !important;
+}
+
+.mud-nav-link .mud-nav-link-text {
+    width: 100%;
+    text-align: start;
+    margin-left: 12px;
+    margin-inline-start: 12px;
+    margin-inline-end: unset;
+    letter-spacing: 0;
+    color: #FFF;
+}
+
+.mud-nav-link {
+    padding: 10px 16px 8px 16px !important;
+}
+
+.active .mud-nav-link-text {
+    color: #FFF !important;
+}
+
+body {
+    background-color: #251e35 !important;
+}
+
+.mud-avatar.mud-avatar-medium {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+    margin: 0px 22px;
+}
+
+.mud-input-control > .mud-input-control-input-container > .mud-input-label-inputcontrol {
+    color: #fff !important;
+}
+
+.mud-input.mud-input-outlined:not(.mud-disabled):not(:focus-within):hover .mud-input-outlined-border {
+    border-color: #fff !important;
+}
+
+.page-item.active .page-link {
+    z-index: 3 !important;
+    color: #dee2e6 !important;
+    background-color: #a1263e !important;
+    border-color: #a1263e !important;
+}
+
+.page-item.disabled .page-link {
+    color: #dee2e6 !important;
+    pointer-events: none !important;
+    background-color: #251e35 !important;
+    border-color: #dee2e6 !important;
+}
+
+.list-group-flush > .list-group-item {
+    border-width: 0 0 1px;
+    background-color: #373740 !important;
+    color: #e0e0e0 !important;
+}
+
+
+.modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: #373740 !important;
+    background-clip: padding-box !important;
+    border: 1px solidrgba(0,0,0,.2) !important;
+    border-radius: 0.3rem !important;
+    outline: 0;
+}
+
+.mud-link.mud-link-disabled {
+    cursor: default;
+    color: #c3c3c6 !important;
+}
+.mud-disabled .mud-icon-root, .mud-disabled .mud-svg-icon, .mud-disabled .mud-icon-default {
+    color: #c3c3c6 !important;
+}
+
+.mud-breadcrumb-separator > span {
+    color: #c3c3c6;
+    opacity: 0.8;
+}
+
